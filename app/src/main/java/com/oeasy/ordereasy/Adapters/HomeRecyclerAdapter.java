@@ -1,5 +1,6 @@
 package com.oeasy.ordereasy.Adapters;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +26,8 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
     private Context context;
     private ArrayList<FoodItem> items;
     private int type;
+    Dialog fDialog;
+
     public HomeRecyclerAdapter(Context context, int type, ArrayList<FoodItem> items) {
         this.items=items;
         this.context=context;
@@ -60,6 +63,18 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
             fImg=itemView.findViewById(R.id.home_food_img);
             fName=itemView.findViewById(R.id.home_food_name);
             fView=itemView.findViewById(R.id.home_food_view);
+            fView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setDialog();
+                }
+            });
         }
+    }
+    private void setDialog() {
+        fDialog=new Dialog(context);
+        fDialog.setContentView(R.layout.dialog_food);
+        fDialog.getWindow().getAttributes().windowAnimations=R.style.MyAnimation_Window;
+        fDialog.show();
     }
 }
