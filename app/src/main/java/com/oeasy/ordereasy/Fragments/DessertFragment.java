@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.oeasy.ordereasy.Activities.MainActivity;
 import com.oeasy.ordereasy.R;
 
 /**
@@ -17,8 +18,7 @@ public class DessertFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_dessert,container,false);
+        View view = inflater.inflate(R.layout.fragment_dessert, container, false);
         return view;
-
     }
 }
