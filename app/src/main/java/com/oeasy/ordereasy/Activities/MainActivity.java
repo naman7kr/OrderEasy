@@ -1,39 +1,63 @@
 package com.oeasy.ordereasy.Activities;
 
-import android.Manifest;
-import android.app.Activity;
+
 import android.content.Intent;
-import android.content.pm.PackageManager;
+
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.oeasy.ordereasy.Adapters.MainBtmAdapter;
-import com.oeasy.ordereasy.Others.ZoomOutPageTransformer;
+import com.oeasy.ordereasy.Others.FlipHorizontalTransformer;
+import com.oeasy.ordereasy.Others.Utilities;
 import com.oeasy.ordereasy.R;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private ViewPager mPager;
     private BottomNavigationView mBtmNav;
     MainBtmAdapter adapter;
-    private FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         initialize();
+
+        setToolbar();
+
+        setFab();
+
         setBottomNavigation();
+
+    }
+
+    private void initialize() {
+        mPager=findViewById(R.id.main_vp);
+        mBtmNav=findViewById(R.id.main_btmnav);
+        fab=findViewById(R.id.include_fab);
+
+    }
+
+    private void setToolbar() {
+        toolbar=getToolbar();
+        toolbar.setNavigationIcon(R.drawable.ic_action_home);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),MenuActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            }
+        });
+    }
+
+    private void setFab() {
+        fab=getFab();
         onFabClick();
-        //checkCameraPermission();
     }
 
     private void onFabClick() {
@@ -41,17 +65,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(),ScannerActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         });
-    }
-
-
-
-    private void initialize() {
-        mPager=findViewById(R.id.main_vp);
-        mBtmNav=findViewById(R.id.main_btmnav);
-        fab=findViewById(R.id.main_fab);
-
     }
 
     private void setBottomNavigation() {
@@ -102,12 +118,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        setPageTransitionAnimation();
+        Utilities.setPageTransitionAnimation(mPager);
     }
 
-    private void setPageTransitionAnimation() {
-        mPager.setPageTransformer(true,new ZoomOutPageTransformer());
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_toolbar,menu);
+        return true;
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.home_cart:
+                startActivity(new Intent(this,CartActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
