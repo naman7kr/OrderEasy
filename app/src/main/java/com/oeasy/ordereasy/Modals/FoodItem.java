@@ -7,6 +7,40 @@ package com.oeasy.ordereasy.Modals;
 public class FoodItem {
 
     private String name;
+    private String desc;
+    private String img;
+    private int type;
+    private int veg;
+    private double price;
+    private int qtyType;
+    private int qty;
+
+    public void setQtyType(int qtyType) {
+        this.qtyType = qtyType;
+    }
+
+    public int getQtyType() {
+
+        return qtyType;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getPrice() {
+
+        return price;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public String getDesc() {
+
+        return desc;
+    }
 
     public void setImg(String img) {
         this.img = img;
@@ -17,9 +51,6 @@ public class FoodItem {
         return img;
     }
 
-    private String img;
-    private int type;
-    private int veg;
 
     public void setVeg(int veg) {
         this.veg = veg;
