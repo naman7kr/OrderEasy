@@ -41,6 +41,8 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
         zscanner = (ZXingScannerView) findViewById(R.id.scanner_zxing);
         sView=new ZXingScannerView(this);
         zscanner.addView(sView);
+        sView.startCamera();
+        sView.setResultHandler(this);
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
             if(checkPermission()){
                 Toast.makeText(this,"Permission is granted",Toast.LENGTH_LONG).show();
@@ -121,6 +123,7 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
         else {
             Toast.makeText(this,"QR not accepted",Toast.LENGTH_LONG).show();
             sView.resumeCameraPreview(this);
+
         }
     }
 
