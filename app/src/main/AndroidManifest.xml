@@ -16,7 +16,11 @@
         <activity android:name=".Activities.MainActivity">
 
         </activity>
-        <activity android:name=".Activities.ScannerActivity" />
+        <activity android:name=".Activities.ScannerActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            >
+        </activity>
         <activity android:name=".Activities.MenuActivity" >
 
         </activity>
