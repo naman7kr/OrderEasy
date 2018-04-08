@@ -48,6 +48,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             {
                 personEmail=account.getEmail();
                 Toast.makeText(this,personEmail,Toast.LENGTH_LONG).show();
+                finish();
             }
         }
 
@@ -64,7 +65,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         google_sign_in_button.setSize(SignInButton.SIZE_STANDARD);
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -80,6 +80,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             /*TODO Auto redirect to home page*/
             startActivity(new Intent(this,MainActivity.class));
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            finish();
         }
     }
 
@@ -104,7 +105,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        Log.e("lol","faf");
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
