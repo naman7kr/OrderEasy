@@ -7,20 +7,36 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.oeasy.ordereasy.Adapters.MainBtmAdapter;
+import com.oeasy.ordereasy.Others.Constants;
 import com.oeasy.ordereasy.Others.FlipHorizontalTransformer;
+import com.oeasy.ordereasy.Others.RequestHandler;
 import com.oeasy.ordereasy.Others.Utilities;
 import com.oeasy.ordereasy.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends BaseActivity {
     private ViewPager mPager;
     private BottomNavigationView mBtmNav;
     MainBtmAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +55,6 @@ public class MainActivity extends BaseActivity {
     private void initialize() {
         mPager=findViewById(R.id.main_vp);
         mBtmNav=findViewById(R.id.main_btmnav);
-        fab=findViewById(R.id.include_fab);
 
     }
 
@@ -58,6 +73,12 @@ public class MainActivity extends BaseActivity {
     private void setFab() {
         fab=getFab();
         onFabClick();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.e("Finish","f");
+        finish();
     }
 
     private void onFabClick() {
@@ -137,4 +158,6 @@ public class MainActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }
