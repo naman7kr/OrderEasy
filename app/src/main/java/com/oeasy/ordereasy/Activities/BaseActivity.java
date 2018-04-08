@@ -1,6 +1,7 @@
 package com.oeasy.ordereasy.Activities;
 
 import android.animation.Animator;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -26,7 +27,7 @@ public class BaseActivity extends AppCompatActivity {
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         toolbar=findViewById(R.id.include_toolbar);
-
+        fab=findViewById(R.id.include_fab);
         if(toolbar!=null){
             setSupportActionBar(toolbar);
         }
