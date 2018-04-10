@@ -39,7 +39,7 @@ public class ProfileFragment extends Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.profile_fragment,container,false);
-        log_out=view.findViewById(R.id.logout_button);
+        log_out=view.findViewById(R.id.log_out);
 
         log_out.setOnClickListener(new View.OnClickListener() {
             @Override
