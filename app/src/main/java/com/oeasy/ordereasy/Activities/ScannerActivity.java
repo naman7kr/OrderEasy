@@ -36,23 +36,42 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
         setContentView(R.layout.activity_scanner);
 
         setToolbar();
-
-
-        zscanner = (ZXingScannerView) findViewById(R.id.scanner_zxing);
+        zscanner = findViewById(R.id.scanner_zxing);
         sView=new ZXingScannerView(this);
         zscanner.addView(sView);
-        sView.startCamera();
-        sView.setResultHandler(this);
+
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
             if(checkPermission()){
-                Toast.makeText(this,"Permission is granted",Toast.LENGTH_LONG).show();
+
             }
             else{
                 requestCameraPermission();
             }
         }
-    }
+        if(Build.VERSION.SDK_INT<=23)
+        sView.startCamera();
+        sView.setResultHandler(this);
+        Log.e("QR","HM");
 
+    }
+    @Override
+    public void handleResult(Result result) {
+        String sResult=result.getText();
+
+        if(sResult.compareToIgnoreCase("stan.com")==0){
+            String table_no=sResult.replace(".com","");
+            Log.e("QR",table_no);
+            startActivity(new Intent(this,CartActivity.class));
+            finish();
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
+        }
+        else {
+            Toast.makeText(this,"QR not accepted",Toast.LENGTH_LONG).show();
+            sView.resumeCameraPreview(this);
+
+        }
+    }
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -114,18 +133,7 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
         return (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)== PackageManager.PERMISSION_GRANTED);
     }
 
-    @Override
-    public void handleResult(Result result) {
-        String sResult=result.getText();
-        Log.e("QR",sResult);
-        if(sResult.compareToIgnoreCase("Stan")==0)
-             startActivity(new Intent(this,CartActivity.class));
-        else {
-            Toast.makeText(this,"QR not accepted",Toast.LENGTH_LONG).show();
-            sView.resumeCameraPreview(this);
 
-        }
-    }
 
     @Override
     protected void onResume() {
@@ -142,9 +150,7 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
             else{
                 requestCameraPermission();
             }
-
         }
-
     }
 
     @Override

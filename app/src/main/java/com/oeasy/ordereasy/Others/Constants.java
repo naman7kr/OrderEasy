@@ -7,7 +7,7 @@ package com.oeasy.ordereasy.Others;
 public class Constants {
     private static final String IP="192.168.43.114";
     private static final String ROOT_URL="http://"+IP+"/ORDER_EASY/";
-    public static final String URL_TEST = ROOT_URL+"test.php";
+    public static final String URL_PROCESS_REQUEST = ROOT_URL+"process_request.php";
     public static final int VEG=1;
     public static final int NON_VEG=0;
     public static final int RECOMMENDED=0;
@@ -20,4 +20,5 @@ public class Constants {
     public static final int QTY_PIECES=0;
     public static final int QTY_PLATE=1;
     public static final int QTY_LITRE=2;
+
 }

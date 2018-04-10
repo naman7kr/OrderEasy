@@ -10,8 +10,8 @@ public class FoodItem {
     private String desc;
     private String img;
     private int type;
-    private int veg;
-    private double price;
+    private int category;
+    private float price;
     private int qtyType;
     private int qty;
 
@@ -24,11 +24,20 @@ public class FoodItem {
         return qtyType;
     }
 
-    public void setPrice(double price) {
+    public int getQty() {
+        return qty;
+    }
+
+    public void setPrice(float price) {
+
         this.price = price;
     }
 
-    public double getPrice() {
+    public void setQty(int qty) {
+        this.qty = qty;
+    }
+
+    public float getPrice() {
 
         return price;
     }
@@ -52,13 +61,13 @@ public class FoodItem {
     }
 
 
-    public void setVeg(int veg) {
-        this.veg = veg;
+    public void setcategory(int category) {
+        this.category = category;
     }
 
-    public int getVeg() {
+    public int getcategory() {
 
-        return veg;
+        return category;
     }
 
     public void setType(int type) {

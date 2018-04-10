@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">OrderEasy</string>
+    <string-array name="qty_pieces">
+        <item>Half</item>
+        <item>Full</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+    </string-array>
 </resources>

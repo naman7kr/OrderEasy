@@ -2,12 +2,9 @@ package com.oeasy.ordereasy.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.oeasy.ordereasy.Adapters.MenuTabsAdapter;
@@ -24,8 +21,9 @@ import com.oeasy.ordereasy.R;
 
 public class MenuActivity extends BaseActivity {
     private ViewPager mPager;
-    private TabLayout mTab;
+    public TabLayout mTab;
     private MenuTabsAdapter adapter;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,7 +32,8 @@ public class MenuActivity extends BaseActivity {
         initialize();
         setToolbar();
         setTabs();
-        int sTab=getIntent().getIntExtra("START_TAB",0);
+
+        int sTab = getIntent().getIntExtra("START_TAB", 0);
         mPager.setCurrentItem(sTab);
 
     }
@@ -64,6 +63,8 @@ public class MenuActivity extends BaseActivity {
     private void initialize() {
         mTab=findViewById(R.id.menu_tabs);
         mPager=findViewById(R.id.menu_vp);
+
+
     }
     private void setTabs() {
         adapter=new MenuTabsAdapter(this,getSupportFragmentManager());
@@ -80,4 +81,5 @@ public class MenuActivity extends BaseActivity {
         adapter.addFragment(new DessertFragment(), "Dessert");
         adapter.addFragment(new DrinksFragment(), "Drinks");
     }
+
 }

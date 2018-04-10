@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.oeasy.ordereasy.Modals.FoodItem;
 import com.oeasy.ordereasy.R;
@@ -36,32 +39,42 @@ public class Utilities {
 
     public static void setPicassoImage(final Context context, final String imgSrc, final ImageView iv, final int FLAG){
         if (FLAG == Constants.SQUA_PLACEHOLDER){
-            Picasso.with(context).load(imgSrc).placeholder(R.drawable.placeholder_sqaure).fit().networkPolicy(NetworkPolicy.OFFLINE).into(iv, new Callback() {
-                @Override
-                public void onSuccess() {
-                }
-
-                @Override
-                public void onError() {
-                    Picasso.with(context).load(imgSrc).placeholder(R.drawable.placeholder_sqaure).fit().into(iv);
-                }
-            });
-        } else {
-            Picasso.with(context).load(imgSrc).placeholder(R.drawable.placeholder_rect).fit().networkPolicy(NetworkPolicy.OFFLINE).into(iv, new Callback() {
-                @Override
-                public void onSuccess() {
-
-                }
-
-                @Override
-                public void onError() {
-                    Picasso.with(context).load(imgSrc).placeholder(R.drawable.placeholder_rect).fit().into(iv);
-                }
-            });
+//            Picasso.with(context).load(imgSrc).placeholder(R.drawable.placeholder_sqaure).fit().networkPolicy(NetworkPolicy.OFFLINE).into(iv, new Callback() {
+//                @Override
+//                public void onSuccess() {
+//                }
+//
+//                @Override
+//                public void onError() {
+//                    Picasso.with(context).load(imgSrc).placeholder(R.drawable.placeholder_sqaure).fit().into(iv);
+//                }
+//            });
+//        } else {
+//            Picasso.with(context).load(imgSrc).placeholder(R.drawable.placeholder_rect).fit().networkPolicy(NetworkPolicy.OFFLINE).into(iv, new Callback() {
+//                @Override
+//                public void onSuccess() {
+//
+//                }
+//
+//                @Override
+//                public void onError() {
+//                    Picasso.with(context).load(imgSrc).placeholder(R.drawable.placeholder_rect).fit().into(iv);
+//                }
+//            });
         }
     }
     public static void setPageTransitionAnimation(ViewPager mPager) {
         mPager.setPageTransformer(true,new FlipHorizontalTransformer());
     }
 
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager cn = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo nf = cn.getActiveNetworkInfo();
+        if (nf != null && nf.isConnected() == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

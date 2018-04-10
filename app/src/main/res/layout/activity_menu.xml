@@ -3,6 +3,7 @@
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+
     >
     <include layout="@layout/include_toolbar" />
     <android.support.design.widget.TabLayout
@@ -13,6 +14,7 @@
         android:background="@color/colorPrimary"
         app:tabTextColor="@color/white"
         android:layout_below="@+id/include_toolbar"
+
         />
     <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
@@ -20,11 +22,5 @@
         android:id="@+id/menu_vp"
         android:layout_below="@+id/menu_tabs"
         />
-    <include layout="@layout/include_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="16dp"
-        />
+
 </RelativeLayout>

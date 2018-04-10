@@ -1,6 +1,8 @@
 package com.oeasy.ordereasy.Fragments;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,12 +10,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -24,6 +26,7 @@ import com.oeasy.ordereasy.Activities.MenuActivity;
 import com.oeasy.ordereasy.Adapters.HomeRecyclerAdapter;
 import com.oeasy.ordereasy.Modals.FoodItem;
 import com.oeasy.ordereasy.Others.Constants;
+import com.oeasy.ordereasy.Interfaces.NoInternetInterface;
 import com.oeasy.ordereasy.Others.RequestHandler;
 import com.oeasy.ordereasy.R;
 
@@ -39,7 +42,7 @@ import java.util.Map;
  * Created by Stan on 4/4/2018.
  */
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements NoInternetInterface {
     private static final int RECOMMENDED_FLAG=0;
     private static final int DESSERT_FLAG = 3;
     private static final int STARTER_FLAG=1;
@@ -47,11 +50,14 @@ public class HomeFragment extends Fragment {
     private static final int DRINKS_FLAG=4;
 
     private RecyclerView rView;
-    private HomeRecyclerAdapter adapter;
-    private ArrayList<FoodItem> fItem=new ArrayList<>();
-    private View recomended;
-    private View drinks;
+   private ArrayList<HomeRecyclerAdapter> adapterList=new ArrayList<>();
+   private ArrayList<ArrayList<FoodItem>> typeLists=new ArrayList<>();
+   private HomeRecyclerAdapter adapter;
     private TextView seeAll;
+    private LinearLayout erll;
+    private ScrollView homell;
+    private ProgressBar pBar;
+    LinearLayout ref;
 
     @Nullable
     @Override
@@ -65,24 +71,54 @@ public class HomeFragment extends Fragment {
         setMainCourse(view);
         setDesserts(view);
         setDrinks(view);
-        getData();
+        loadData();
         return view;
     }
-    public void getData() {
-        StringRequest request=new StringRequest(Request.Method.POST, Constants.URL_TEST, new Response.Listener<String>() {
+    private void initialize(View view) {
+        homell=view.findViewById(R.id.home_view);
+        erll=view.findViewById(R.id.no_connection_view);
+        pBar=view.findViewById(R.id.home_progress);
+        ref= view.findViewById(R.id.tap_to_retry);
+
+        erll.setVisibility(View.GONE);
+        homell.setVisibility(View.GONE);
+        pBar.setVisibility(View.VISIBLE);
+        for(int i=0;i<5;i++){
+            typeLists.add(new ArrayList<FoodItem>());
+        }
+    }
+    public void loadData() {
+        StringRequest request=new StringRequest(Request.Method.POST, Constants.URL_PROCESS_REQUEST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.e("JSON","OK");
+                erll.setVisibility(View.GONE);
+                homell.setVisibility(View.VISIBLE);
+                pBar.setVisibility(View.GONE);
                 try {
+                    for (int j = 1; j <= 4; j++) {
 
-                    JSONObject jsonObject=new JSONObject(response);
+                        JSONObject jsonObject = new JSONObject(response);
+                        JSONArray fType = jsonObject.getJSONArray( getType(j));
+                        typeLists.get(j).clear();
+                        for (int i = 0; i < fType.length(); i++) {
+                            JSONObject item = fType.getJSONObject(i);
 
-                    for(int i=0;i<jsonObject.length();i++){
-//                        Log.e("JSON",jsonObject.get
-//                        Log.e("JSON1",jsonArray.getJSONObject(i).getString("id"));
+                            FoodItem fItem=new FoodItem();
+                            fItem.setName(item.getString("name"));
+                            if(item.getString("image")==null){
+                                fItem.setImg("R.drawable.placeholder_square");
+                            }else
+                                fItem.setImg(item.getString("image"));
+                            fItem.setPrice((float) item.getDouble("price"));
+                            fItem.setcategory(item.getInt("category"));
+                            fItem.setQtyType(item.getInt("quantity_type"));
+                            fItem.setDesc(item.getString("description"));
+
+                            typeLists.get(j).add(fItem);
+                            HomeRecyclerAdapter ad=adapterList.get(j);
+                            ad.notifyDataSetChanged();
+                        }
                     }
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -90,23 +126,23 @@ public class HomeFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getContext(),error.getMessage(),Toast.LENGTH_SHORT).show();
+                hideLayout();
+                showRefreshPage();
+                onRefresh();
             }
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params= new HashMap<>();
-                params.put("four", "s");
+                params.put("home", "s");
                 return params;
             }
         };
-        //RequestQueue requestQueue= Volley.newRequestQueue(this);
-        //requestQueue.add(request);
-        RequestHandler.getInstance(getContext()).addToRequestQueue(request);
-    }
-    private void initialize(View view) {
 
+        RequestHandler.getInstance(getContext(),this).addToRequestQueue(request);
     }
+
+
     private void setSlider(View view) {
 
     }
@@ -118,6 +154,7 @@ public class HomeFragment extends Fragment {
         rView = view.findViewById(R.id.home_recommended);
         rView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         adapter = new HomeRecyclerAdapter(getContext(),RECOMMENDED_FLAG , getFoodItem(Constants.RECOMMENDED));
+        adapterList.add(adapter);
         rView.setAdapter(adapter);
     }
     private void setStarters(View view) {
@@ -127,6 +164,7 @@ public class HomeFragment extends Fragment {
         rView = view.findViewById(R.id.home_starters);
         rView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         adapter = new HomeRecyclerAdapter(getContext(), STARTER_FLAG, getFoodItem(Constants.STARTERS));
+        adapterList.add(adapter);
         rView.setAdapter(adapter);
     }
 
@@ -137,6 +175,8 @@ public class HomeFragment extends Fragment {
         rView = view.findViewById(R.id.home_maincourse);
         rView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         adapter = new HomeRecyclerAdapter(getContext(), MAINCOURSE_FLAG, getFoodItem(Constants.MAIN_COURSE));
+        adapterList.add(adapter);
+
         rView.setAdapter(adapter);
     }
     private void setDesserts(View view) {
@@ -146,6 +186,8 @@ public class HomeFragment extends Fragment {
         rView = view.findViewById(R.id.home_desserts);
         rView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         adapter = new HomeRecyclerAdapter(getContext(), DESSERT_FLAG, getFoodItem(Constants.DESSERT));
+        adapterList.add(adapter);
+
         rView.setAdapter(adapter);
     }
     public void setDrinks(View view) {
@@ -155,6 +197,8 @@ public class HomeFragment extends Fragment {
         rView = view.findViewById(R.id.home_drinks);
         rView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         adapter = new HomeRecyclerAdapter(getContext(), DRINKS_FLAG, getFoodItem(Constants.DRINKS));
+        adapterList.add(adapter);
+
         rView.setAdapter(adapter);
     }
 
@@ -172,22 +216,60 @@ public class HomeFragment extends Fragment {
     }
 
     private ArrayList<FoodItem> getFoodItem(int type){
-        fItem.clear();
-        String name[]={"Chicken Kebab", "Chicken Lollipop","Chicken Majestic", "Herby Paneer Parcels","Vegetarian Bread Katori"};
-        String img[]={"http://www.ojass.in/app/Images/HomeEvents/major_business.png",
-                "http://www.ojass.in/app/Images/HomeEvents/major_directorscut.png",
-                "http://www.ojass.in/app/Images/HomeEvents/major_codemania.png",
-                "http://www.ojass.in/app/Images/HomeEvents/noground.png",
-                "http://www.ojass.in/app/Images/HomeEvents/major_robowar.png"};
-        for(int i=0;i<name.length;i++){
-            FoodItem item=new FoodItem();
-            item.setImg(img[i]);
-            item.setName(name[i]);
-            fItem.add(item);
-        }
-        return fItem;
+        return typeLists.get(type);
     }
 
+    public String getType(int tPos) {
+       if(tPos==1){
+           return "starters";
+       }
+       if(tPos==2){
+           return "main_course";
+       }
+       if(tPos==3){
+           return "dessert";
+       }
+       if(tPos==4){
+           return "drinks";
+       }
+       return null;
+    }
+    @Override
+    public void showRefreshLayout() {
+        hideLayout();
+        showRefreshPage();
+        onRefresh();
+    }
 
+    private void onRefresh() {
 
+        ref.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               recreateActivityCompat(getActivity());
+
+            }
+        });
+    }
+    public  final void recreateActivityCompat(final Activity a) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            a.recreate();
+        } else {
+            final Intent intent = a.getIntent();
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            a.finish();
+            a.overridePendingTransition(0, 0);
+            a.startActivity(intent);
+            a.overridePendingTransition(0, 0);
+        }
+    }
+    private void showRefreshPage() {
+
+        erll.setVisibility(View.VISIBLE);
+        pBar.setVisibility(View.GONE);
+    }
+
+    private void hideLayout() {
+       homell.setVisibility(View.GONE);
+    }
 }
