@@ -86,12 +86,15 @@ public class MainActivity extends BaseActivity {
                 switch (item.getItemId()){
                     case R.id.main_home:
                         mPager.setCurrentItem(0);
+                        fab.setVisibility(View.VISIBLE);
                         return true;
                     case R.id.main_profile:
                         mPager.setCurrentItem(1);
+                        fab.setVisibility(View.GONE);
                         return true;
                     case R.id.main_aboutus:
                         mPager.setCurrentItem(2);
+                        fab.setVisibility(View.GONE);
                         return true;
                 }
                 return false;
