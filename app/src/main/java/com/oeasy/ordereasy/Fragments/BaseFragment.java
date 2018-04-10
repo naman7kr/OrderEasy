@@ -35,7 +35,7 @@ public class BaseFragment extends Fragment {
         return adapter;
     }
     public void setSearchToolbar(RecyclerView rView,ArrayList<FoodItem> list, final Toolbar btmToolbar) {
-        final MenuActivity activity= (MenuActivity) getActivity();
+
         rView.setOnScrollListener(new HidingScrollListener() {
             @Override
             public void onHide() {
