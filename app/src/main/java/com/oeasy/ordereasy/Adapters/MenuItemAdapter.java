@@ -47,6 +47,8 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
         final FoodItem item=list.get(position);
         holder.fName.setText(item.getName());
         holder.fPrice.setText(String.valueOf(item.getPrice()));
+        if (item.getImg() != null)
+            Utilities.setPicassoImage(context, Constants.IMG_ROOT+item.getImg(), holder.fImg, Constants.SQUA_PLACEHOLDER);
         holder.fView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,6 +82,8 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
         TextView price=fDialog.findViewById(R.id.dialog_price);
         TextView desc=fDialog.findViewById(R.id.dialog_description);
         Spinner sp=fDialog.findViewById(R.id.dialog_sp_qty);
+        if (item.getImg() != null)
+            Utilities.setPicassoImage(context, Constants.IMG_ROOT+item.getImg(), fImg, Constants.SQUA_PLACEHOLDER);
         setSpinner(sp);
         sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

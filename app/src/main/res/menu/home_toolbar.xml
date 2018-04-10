@@ -4,7 +4,7 @@
     <item
         android:title="Cart"
         app:showAsAction="always"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_cart"
         android:id="@+id/home_cart"
         />
 

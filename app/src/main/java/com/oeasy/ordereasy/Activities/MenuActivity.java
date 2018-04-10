@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.oeasy.ordereasy.Adapters.MenuTabsAdapter;
@@ -81,5 +83,22 @@ public class MenuActivity extends BaseActivity {
         adapter.addFragment(new DessertFragment(), "Dessert");
         adapter.addFragment(new DrinksFragment(), "Drinks");
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_toolbar,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.home_cart:
+                startActivity(new Intent(this,CartActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
 }

@@ -5,16 +5,36 @@ package com.oeasy.ordereasy.Modals;
  */
 
 public class FoodItem {
+    public void setId(int id) {
+        this.id = id;
+    }
 
+    public int getId() {
+
+        return id;
+    }
+
+    private int id;
     private String name;
     private String desc;
     private String img;
     private int type;
+
+
+
     private int category;
     private float price;
     private int qtyType;
-    private int qty;
+    private String qty;
 
+    public void setCategory(int category) {
+        this.category = category;
+    }
+
+    public int getCategory() {
+
+        return category;
+    }
     public void setQtyType(int qtyType) {
         this.qtyType = qtyType;
     }
@@ -24,7 +44,7 @@ public class FoodItem {
         return qtyType;
     }
 
-    public int getQty() {
+    public String getQty() {
         return qty;
     }
 
@@ -33,7 +53,7 @@ public class FoodItem {
         this.price = price;
     }
 
-    public void setQty(int qty) {
+    public void setQty(String qty) {
         this.qty = qty;
     }
 

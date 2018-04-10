@@ -3,14 +3,17 @@
     <item
         android:title="Home"
         android:id="@+id/main_home"
-        android:icon="@drawable/ic_action_home"
+        android:icon="@mipmap/ic_home_black"
         />
     <item
         android:title="Profile"
         android:id="@+id/main_profile"
+        android:icon="@mipmap/ic_profile"
+
         />
     <item
         android:title="About Us"
         android:id="@+id/main_aboutus"
+        android:icon="@mipmap/ic_aboutus"
         />
 </menu>

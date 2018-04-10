@@ -3,10 +3,12 @@ package com.oeasy.ordereasy.Activities;
 
 import android.content.Intent;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,12 +43,12 @@ public class MainActivity extends BaseActivity {
     private void initialize() {
         mPager=findViewById(R.id.main_vp);
         mBtmNav=findViewById(R.id.main_btmnav);
-
     }
 
     private void setToolbar() {
+        toolbar.setTitleTextColor(Color.WHITE);
         toolbar=getToolbar();
-        toolbar.setNavigationIcon(R.drawable.ic_action_home);
+        toolbar.setNavigationIcon(R.mipmap.ic_menu);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +88,7 @@ public class MainActivity extends BaseActivity {
                 switch (item.getItemId()){
                     case R.id.main_home:
                         mPager.setCurrentItem(0);
+
                         return true;
                     case R.id.main_profile:
                         mPager.setCurrentItem(1);

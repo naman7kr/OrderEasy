@@ -105,14 +105,22 @@ public class HomeFragment extends Fragment implements NoInternetInterface {
 
                             FoodItem fItem=new FoodItem();
                             fItem.setName(item.getString("name"));
-                            if(item.getString("image")==null){
+                            if(item.getString("image").compareTo("")==0){
                                 fItem.setImg("R.drawable.placeholder_square");
+
                             }else
                                 fItem.setImg(item.getString("image"));
+                            if(fItem.getQty()!=null){
+                                fItem.setQty(item.getString("quantity"));
+                            }
+                            else{
+                                fItem.setQty("one");
+                            }
                             fItem.setPrice((float) item.getDouble("price"));
                             fItem.setcategory(item.getInt("category"));
                             fItem.setQtyType(item.getInt("quantity_type"));
                             fItem.setDesc(item.getString("description"));
+
 
                             typeLists.get(j).add(fItem);
                             HomeRecyclerAdapter ad=adapterList.get(j);

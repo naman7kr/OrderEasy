@@ -15,6 +15,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_launcher_background"
             android:id="@+id/dialog_fimage"
+            android:scaleType="fitXY"
             />
     </android.support.design.widget.AppBarLayout>
   <LinearLayout

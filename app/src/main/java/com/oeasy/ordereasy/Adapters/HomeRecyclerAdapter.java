@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.oeasy.ordereasy.Modals.FoodItem;
 import com.oeasy.ordereasy.Others.Constants;
+import com.oeasy.ordereasy.Others.DatabaseHelper;
 import com.oeasy.ordereasy.Others.Utilities;
 import com.oeasy.ordereasy.R;
 
@@ -33,11 +34,14 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
     private int type;
     Dialog fDialog;
     private ImageView dialogImage;
+    DatabaseHelper db;
+    int alreadyPresent;
 
     public HomeRecyclerAdapter(Context context, int type, ArrayList<FoodItem> items) {
         this.items=items;
         this.context=context;
         this.type=type;
+        db = new DatabaseHelper(context);
     }
 
     @Override
@@ -49,20 +53,28 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         final FoodItem current = items.get(position);
-        if (current.getImg() != null)
-            Utilities.setPicassoImage(context, current.getImg(), holder.fImg, Constants.SQUA_PLACEHOLDER);
+//        if (current.getImg() != null)
+//            Utilities.setPicassoImage(context, current.getImg(), holder.fImg, Constants.SQUA_PLACEHOLDER);
         holder.fName.setText(current.getName());
         holder.fView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showFoodDialog(context,current);
-
+                alreadyPresent=db.countFoodItem(current);
                 Button addToCart=fDialog.findViewById(R.id.dialog_addbtn);
                 addToCart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //store data in shared preference
-                        fDialog.dismiss();
+                        //store data in sqlite
+                        if(alreadyPresent==0)
+                         db.createFoodItems(current);
+                        else{
+                            ArrayList<FoodItem> dbResponse=db.getAllFoodItems();
+                            for (int i = 0;i<dbResponse.size();i++){
+                                Log.e("RES",dbResponse.get(i).getName());
+                            }
+                            fDialog.dismiss();
+                        }
                     }
                 });
             }
@@ -70,6 +82,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
     }
     public void showFoodDialog(Context context, FoodItem item){
         fDialog=new Dialog(context);
+
         WindowManager.LayoutParams lp=new WindowManager.LayoutParams();
         lp.copyFrom(fDialog.getWindow().getAttributes());
         lp.width=WindowManager.LayoutParams.MATCH_PARENT;
