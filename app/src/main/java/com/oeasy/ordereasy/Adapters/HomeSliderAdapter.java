@@ -3,11 +3,14 @@ package com.oeasy.ordereasy.Adapters;
 import android.content.Context;
 import android.provider.SyncStateContract;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.oeasy.ordereasy.Others.Constants;
+import com.oeasy.ordereasy.Others.Utilities;
 import com.oeasy.ordereasy.R;
 
 /**
@@ -17,19 +20,21 @@ import com.oeasy.ordereasy.R;
 public class HomeSliderAdapter extends PagerAdapter {
 
     private Context context;
-    private String[] imageUrls, clickUrls;
+    private String[] imageUrls;
 
-    public HomeSliderAdapter(Context context, String[] imageUrls, String[] clickUrls){
+    public HomeSliderAdapter(Context context, String[] imageUrls){
         this.context = context;
         this.imageUrls = imageUrls;
-        this.clickUrls = clickUrls;
+
     }
 
     @Override
     public Object instantiateItem(final ViewGroup container, final int position) {
         LayoutInflater layoutinflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         View view = layoutinflater.inflate(R.layout.item_slider, container, false);
-//        Utilities.setPicassoImage(context, imageUrls[position], iv, SyncStateContract.Constants.RECT_PLACEHOLDER);
+        ImageView iv=view.findViewById(R.id.iv_poster);
+        Log.e("Hm",imageUrls[position]);
+        Utilities.setPicassoImage(context, Constants.IMG_SLIDER_ROOT+ imageUrls[position], iv, 0);
         container.addView(view);
         return view;
     }

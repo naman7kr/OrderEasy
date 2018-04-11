@@ -16,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
+        android:visibility="gone"
 
         />
     <ScrollView
@@ -71,6 +72,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:id="@+id/home_recommended_seeallview"
+            android:visibility="gone"
             >
 
             <TextView

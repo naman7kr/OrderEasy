@@ -20,6 +20,8 @@ import com.oeasy.ordereasy.R;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
+import static android.Manifest.permission.CAMERA;
+
 
 /**
  * Created by Stan on 4/5/2018.
@@ -54,24 +56,12 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
         Log.e("QR","HM");
 
     }
-    @Override
-    public void handleResult(Result result) {
-        String sResult=result.getText();
-
-        if(sResult.compareToIgnoreCase("stan.com")==0){
-            String table_no=sResult.replace(".com","");
-            Log.e("QR",table_no);
-            startActivity(new Intent(this,CartActivity.class));
-            finish();
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-
-        }
-        else {
-            Toast.makeText(this,"QR not accepted",Toast.LENGTH_LONG).show();
-            sView.resumeCameraPreview(this);
-
+    private void requestCameraPermission() {
+            if (ContextCompat.checkSelfPermission(this, CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{CAMERA}, REQUEST_CAMERA);
         }
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -91,49 +81,32 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
             }
         });
     }
-
-    private void requestCameraPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                {
-                    if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA))
-                        Toast.makeText(this, "No Permission to use the Camera services", Toast.LENGTH_SHORT).show();
-                    requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
-                }
-
-            }
-        }
-    }
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_CAMERA: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay!
-
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        finish();
-                    }
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
     private boolean checkPermission(){
-        return (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)== PackageManager.PERMISSION_GRANTED);
+        return (ContextCompat.checkSelfPermission(this, CAMERA)== PackageManager.PERMISSION_GRANTED);
+    }
+    private void requestPermission(){
+        ActivityCompat.requestPermissions(this,new String[]{CAMERA},REQUEST_CAMERA);
     }
 
 
+    @Override
+    public void handleResult(Result result) {
+        String sResult=result.getText();
+
+        if(sResult.compareToIgnoreCase("Table 1")==0||sResult.compareToIgnoreCase("Table 2")==0||sResult.compareToIgnoreCase("Table 3")==0||sResult.compareToIgnoreCase("Table 4")==0){
+            String table_no=sResult.replace(".com","").replace("Table ","");
+            Log.e("QR",table_no);
+            startActivity(new Intent(this,CartActivity.class));
+            finish();
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
+        }
+        else {
+            Toast.makeText(this,"QR not accepted",Toast.LENGTH_LONG).show();
+            sView.resumeCameraPreview(this);
+
+        }
+    }
 
     @Override
     protected void onResume() {

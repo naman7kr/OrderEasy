@@ -53,8 +53,8 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         final FoodItem current = items.get(position);
-//        if (current.getImg() != null)
-//            Utilities.setPicassoImage(context, current.getImg(), holder.fImg, Constants.SQUA_PLACEHOLDER);
+        if (current.getImg() != null)
+            Utilities.setPicassoImage(context, Constants.IMG_ROOT+current.getImg(), holder.fImg, Constants.SQUA_PLACEHOLDER);
         holder.fName.setText(current.getName());
         holder.fView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +99,9 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         TextView price=fDialog.findViewById(R.id.dialog_price);
         TextView desc=fDialog.findViewById(R.id.dialog_description);
         Spinner sp=fDialog.findViewById(R.id.dialog_sp_qty);
+        if (item.getImg() != null)
+            Utilities.setPicassoImage(context, Constants.IMG_ROOT+item.getImg(), fImg, Constants.SQUA_PLACEHOLDER);
+
         setSpinner(sp);
         sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -111,6 +114,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
 
             }
         });
+
         price.setText( String.valueOf(item.getPrice()));
         desc.setText(item.getDesc());
         setDialogImage(fImg);

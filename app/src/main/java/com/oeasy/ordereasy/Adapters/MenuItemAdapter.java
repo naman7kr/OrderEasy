@@ -96,6 +96,8 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
 
             }
         });
+        if (item.getImg() != null)
+            Utilities.setPicassoImage(context, Constants.IMG_ROOT+item.getImg(), fImg, Constants.SQUA_PLACEHOLDER);
         price.setText( String.valueOf(item.getPrice()));
         desc.setText(item.getDesc());
         setDialogImage(fImg);

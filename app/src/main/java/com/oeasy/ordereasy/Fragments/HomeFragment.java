@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,9 +28,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.oeasy.ordereasy.Activities.MainActivity;
 import com.oeasy.ordereasy.Activities.MenuActivity;
 import com.oeasy.ordereasy.Adapters.HomeRecyclerAdapter;
+import com.oeasy.ordereasy.Adapters.HomeSliderAdapter;
 import com.oeasy.ordereasy.Modals.FoodItem;
 import com.oeasy.ordereasy.Others.Constants;
 import com.oeasy.ordereasy.Interfaces.NoInternetInterface;
+import com.oeasy.ordereasy.Others.CustomScroller;
 import com.oeasy.ordereasy.Others.RequestHandler;
 import com.oeasy.ordereasy.R;
 
@@ -35,21 +40,29 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import me.relex.circleindicator.CircleIndicator;
 
 /**
  * Created by Stan on 4/4/2018.
  */
 
-public class HomeFragment extends Fragment implements NoInternetInterface {
+public class HomeFragment extends Fragment implements NoInternetInterface, ViewPager.OnPageChangeListener {
     private static final int RECOMMENDED_FLAG=0;
     private static final int DESSERT_FLAG = 3;
     private static final int STARTER_FLAG=1;
     private static final int MAINCOURSE_FLAG=2;
     private static final int DRINKS_FLAG=4;
+    private static final int BANNER_TRANSITION_DELAY = 1200;
+    private static final int BANNER_DELAY_TIME = 5 * 1000;
 
+    private Handler handler;
+    private boolean firstScroll = true;
+    private Runnable runnable;
     private RecyclerView rView;
    private ArrayList<HomeRecyclerAdapter> adapterList=new ArrayList<>();
    private ArrayList<ArrayList<FoodItem>> typeLists=new ArrayList<>();
@@ -59,6 +72,8 @@ public class HomeFragment extends Fragment implements NoInternetInterface {
     private ScrollView homell;
     private ProgressBar pBar;
     LinearLayout ref;
+    ViewPager sliderVP;
+    CircleIndicator indicator;
 
     @Nullable
     @Override
@@ -80,6 +95,8 @@ public class HomeFragment extends Fragment implements NoInternetInterface {
         erll=view.findViewById(R.id.no_connection_view);
         pBar=view.findViewById(R.id.home_progress);
         ref= view.findViewById(R.id.tap_to_retry);
+        sliderVP=view.findViewById(R.id.home_poster);
+        indicator=view.findViewById(R.id.home_indicator);
 
         erll.setVisibility(View.GONE);
         homell.setVisibility(View.GONE);
@@ -128,6 +145,29 @@ public class HomeFragment extends Fragment implements NoInternetInterface {
                             HomeRecyclerAdapter ad=adapterList.get(j);
                             ad.notifyDataSetChanged();
                         }
+                        String img[]={"ic_slider1.jpg","ic_slider2.jpg","ic_slider3.jpg"};
+                        sliderVP.setAdapter(new HomeSliderAdapter(getContext(), img));
+                        indicator.setViewPager(sliderVP);
+                        sliderVP.setOnPageChangeListener(HomeFragment.this);
+                        try{
+                            Field mScroller = ViewPager.class.getDeclaredField("mScroller");
+                            mScroller.setAccessible(true);
+                            mScroller.set(sliderVP, new CustomScroller(sliderVP.getContext(),BANNER_TRANSITION_DELAY ));
+                        } catch (Exception e){}
+
+                        handler = new Handler(Looper.getMainLooper());
+                        runnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                int currItem = sliderVP.getCurrentItem();
+                                if (currItem == 2){
+                                    sliderVP.setCurrentItem(0);
+                                } else {
+                                    sliderVP.setCurrentItem(++currItem);
+                                }
+                            }
+                        };
+                        handler.postDelayed(runnable, BANNER_DELAY_TIME);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -281,5 +321,26 @@ public class HomeFragment extends Fragment implements NoInternetInterface {
 
     private void hideLayout() {
        homell.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        if (firstScroll){
+            firstScroll = false;
+        } else {
+            handler.removeCallbacks(runnable);
+        }
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        if (state == ViewPager.SCROLL_STATE_IDLE){
+            handler.postDelayed(runnable, BANNER_DELAY_TIME);
+        }
     }
 }
