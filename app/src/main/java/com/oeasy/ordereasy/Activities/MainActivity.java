@@ -43,6 +43,7 @@ public class MainActivity extends BaseActivity {
     private void initialize() {
         mPager=findViewById(R.id.main_vp);
         mBtmNav=findViewById(R.id.main_btmnav);
+
     }
 
     private void setToolbar() {
@@ -65,8 +66,13 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        Log.e("Finish","f");
-        finish();
+        if(mPager.getCurrentItem()==2||mPager.getCurrentItem()==1)
+        {
+            mPager.setCurrentItem(0);
+        }
+        else{
+            finish();
+        }
     }
 
     private void onFabClick() {
@@ -88,13 +94,15 @@ public class MainActivity extends BaseActivity {
                 switch (item.getItemId()){
                     case R.id.main_home:
                         mPager.setCurrentItem(0);
-
+                        fab.setVisibility(View.VISIBLE);
                         return true;
                     case R.id.main_profile:
                         mPager.setCurrentItem(1);
+                        fab.setVisibility(View.GONE);
                         return true;
                     case R.id.main_aboutus:
                         mPager.setCurrentItem(2);
+                        fab.setVisibility(View.GONE);
                         return true;
                 }
                 return false;
@@ -128,7 +136,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        Utilities.setPageTransitionAnimation(mPager);
+     //   Utilities.setPageTransitionAnimation(mPager);
     }
 
     @Override

@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.oeasy.ordereasy">
+
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:name=".Others.OrderEasyApplication"
         android:allowBackup="true"
@@ -14,27 +18,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".Activities.MainActivity">
-
-        </activity>
-        <activity android:name=".Activities.ScannerActivity"
+        <activity android:name=".Activities.MainActivity" />
+        <activity
+            android:name=".Activities.ScannerActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            >
-        </activity>
-        <activity android:name=".Activities.MenuActivity" >
-
-        </activity>
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name=".Activities.MenuActivity" />
         <activity android:name=".Activities.CartActivity" />
-        <activity android:name=".Activities.LoginActivity" >
+        <activity android:name=".Activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+            
     </application>
-
 
 </manifest>

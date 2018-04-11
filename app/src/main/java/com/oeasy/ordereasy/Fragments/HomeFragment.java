@@ -22,6 +22,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.oeasy.ordereasy.Activities.MainActivity;
 import com.oeasy.ordereasy.Activities.MenuActivity;
 import com.oeasy.ordereasy.Adapters.HomeRecyclerAdapter;
 import com.oeasy.ordereasy.Modals.FoodItem;
@@ -83,6 +84,7 @@ public class HomeFragment extends Fragment implements NoInternetInterface {
         erll.setVisibility(View.GONE);
         homell.setVisibility(View.GONE);
         pBar.setVisibility(View.VISIBLE);
+
         for(int i=0;i<5;i++){
             typeLists.add(new ArrayList<FoodItem>());
         }

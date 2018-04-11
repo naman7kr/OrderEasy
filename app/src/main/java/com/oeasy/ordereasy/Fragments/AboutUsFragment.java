@@ -6,7 +6,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.oeasy.ordereasy.Activities.MainActivity;
 import com.oeasy.ordereasy.R;
 
 
@@ -18,6 +21,9 @@ public class AboutUsFragment extends Fragment {
 
     LayoutInflater inflater;
     ViewGroup container;
+    ImageView about_us_image;
+    TextView about_us_text;
+    TextView title;
 
     @Nullable
     @Override
@@ -33,6 +39,12 @@ public class AboutUsFragment extends Fragment {
 
 
     private void initialize(View v) {
+        about_us_image=v.findViewById(R.id.about_us_image);
+        about_us_text=v.findViewById(R.id.about_us_text);
+        title= v.findViewById(R.id.title);
+
+
+
     }
 
 

@@ -34,9 +34,8 @@ public class MenuActivity extends BaseActivity {
         initialize();
         setToolbar();
         setTabs();
+        getSeeAllRequest();
 
-        int sTab = getIntent().getIntExtra("START_TAB", 0);
-        mPager.setCurrentItem(sTab);
 
     }
 
@@ -101,4 +100,8 @@ public class MenuActivity extends BaseActivity {
     }
 
 
+    public void getSeeAllRequest() {
+        int sTab = getIntent().getIntExtra("START_TAB", 0);
+        mPager.setCurrentItem(sTab);
+    }
 }
