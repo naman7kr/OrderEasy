@@ -33,7 +33,6 @@ public class HomeSliderAdapter extends PagerAdapter {
         LayoutInflater layoutinflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         View view = layoutinflater.inflate(R.layout.item_slider, container, false);
         ImageView iv=view.findViewById(R.id.iv_poster);
-        Log.e("Hm",imageUrls[position]);
         Utilities.setPicassoImage(context, Constants.IMG_SLIDER_ROOT+ imageUrls[position], iv, 0);
         container.addView(view);
         return view;

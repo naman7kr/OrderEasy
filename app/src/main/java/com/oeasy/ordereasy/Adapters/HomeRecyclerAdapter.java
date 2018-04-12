@@ -21,6 +21,7 @@ import com.oeasy.ordereasy.Others.Constants;
 import com.oeasy.ordereasy.Others.DatabaseHelper;
 import com.oeasy.ordereasy.Others.Utilities;
 import com.oeasy.ordereasy.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -56,9 +57,11 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         if (current.getImg() != null)
             Utilities.setPicassoImage(context, Constants.IMG_ROOT+current.getImg(), holder.fImg, Constants.SQUA_PLACEHOLDER);
         holder.fName.setText(current.getName());
+
         holder.fView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 showFoodDialog(context,current);
                 alreadyPresent=db.countFoodItem(current);
                 Button addToCart=fDialog.findViewById(R.id.dialog_addbtn);
@@ -69,12 +72,10 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
                         if(alreadyPresent==0)
                          db.createFoodItems(current);
                         else{
-                            ArrayList<FoodItem> dbResponse=db.getAllFoodItems();
-                            for (int i = 0;i<dbResponse.size();i++){
-                                Log.e("RES",dbResponse.get(i).getName());
-                            }
-                            fDialog.dismiss();
+
+
                         }
+                        fDialog.dismiss();
                     }
                 });
             }
@@ -96,12 +97,14 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
     private void setDialogfContents(Context context, FoodItem item, Dialog fDialog) {
         TextView fName = fDialog.findViewById(R.id.dialog_name);
         ImageView fImg = fDialog.findViewById(R.id.dialog_fimage);
+
         TextView price=fDialog.findViewById(R.id.dialog_price);
         TextView desc=fDialog.findViewById(R.id.dialog_description);
         Spinner sp=fDialog.findViewById(R.id.dialog_sp_qty);
-        if (item.getImg() != null)
-            Utilities.setPicassoImage(context, Constants.IMG_ROOT+item.getImg(), fImg, Constants.SQUA_PLACEHOLDER);
-
+        if (item.getImg() != null) {
+            Picasso.with(context).load(Constants.IMG_ROOT+item.getImg()).into(fImg);
+                  Log.e("LOL",Constants.IMG_ROOT+item.getImg());
+        }
         setSpinner(sp);
         sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -119,7 +122,6 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         desc.setText(item.getDesc());
         setDialogImage(fImg);
         fName.setText(item.getName());
-        Utilities.setPicassoImage(context, item.getImg(), fImg, Constants.SQUA_PLACEHOLDER);
     }
 
     private void setSpinner(Spinner sp) {

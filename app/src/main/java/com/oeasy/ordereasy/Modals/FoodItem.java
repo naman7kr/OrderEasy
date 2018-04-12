@@ -19,9 +19,6 @@ public class FoodItem {
     private String desc;
     private String img;
     private int type;
-
-
-
     private int category;
     private float price;
     private int qtyType;
@@ -81,14 +78,9 @@ public class FoodItem {
     }
 
 
-    public void setcategory(int category) {
-        this.category = category;
-    }
 
-    public int getcategory() {
 
-        return category;
-    }
+
 
     public void setType(int type) {
         this.type = type;

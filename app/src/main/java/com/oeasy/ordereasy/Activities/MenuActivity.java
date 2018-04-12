@@ -4,17 +4,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.oeasy.ordereasy.Adapters.MenuTabsAdapter;
+import com.oeasy.ordereasy.Fragments.BaseFragment;
 import com.oeasy.ordereasy.Fragments.DessertFragment;
 import com.oeasy.ordereasy.Fragments.DrinksFragment;
 import com.oeasy.ordereasy.Fragments.MainCourseFragment;
 import com.oeasy.ordereasy.Fragments.RecommendedFragment;
 import com.oeasy.ordereasy.Fragments.StartersFragment;
+import com.oeasy.ordereasy.Interfaces.MenuBtmSearchInterface;
 import com.oeasy.ordereasy.R;
 
 /**
@@ -25,6 +31,8 @@ public class MenuActivity extends BaseActivity {
     private ViewPager mPager;
     public TabLayout mTab;
     private MenuTabsAdapter adapter;
+    public Toolbar btmToolbar;
+    private int flag=1;
 
 
     @Override
@@ -35,9 +43,66 @@ public class MenuActivity extends BaseActivity {
         setToolbar();
         setTabs();
         getSeeAllRequest();
-
+        setBottomSearchBar();
 
     }
+
+    private void setBottomSearchBar() {
+        btmToolbar.inflateMenu(R.menu.menu_search);
+        btmToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(final MenuItem item) {
+                if(item.getItemId()==R.id.menu_item_search) {
+                    flag=1;
+                    final int current = mPager.getCurrentItem();
+                    final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+
+                    searchItem(item,current,searchView);
+
+                        final ViewPager.OnPageChangeListener listener = new ViewPager.OnPageChangeListener() {
+                            @Override
+                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                            }
+
+                            @Override
+                            public void onPageSelected(int position) {
+
+                                if (current != position) {
+                                    flag = 0;
+                                    Log.e("LPL", String.valueOf(position));
+                                    item.collapseActionView();
+                                }
+                                else{
+                                    flag=1;
+
+                                }
+                            }
+
+                            @Override
+                            public void onPageScrollStateChanged(int state) {
+
+                            }
+                        };
+
+                        mPager.addOnPageChangeListener(listener);
+                    if(flag==0){
+                        Log.e("LPL","LOL");
+                        mPager.removeOnPageChangeListener(listener);
+                    }
+
+                }
+                return true;
+            }
+
+            private void searchItem(MenuItem item, int current, SearchView searchView) {
+
+                MenuBtmSearchInterface i = (MenuBtmSearchInterface) adapter.getItem(current);
+                i.setToolbarIcon(item,searchView);
+            }
+        });
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -64,6 +129,7 @@ public class MenuActivity extends BaseActivity {
     private void initialize() {
         mTab=findViewById(R.id.menu_tabs);
         mPager=findViewById(R.id.menu_vp);
+        btmToolbar=findViewById(R.id.btm_toolbar);
 
 
     }

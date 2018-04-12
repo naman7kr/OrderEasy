@@ -129,17 +129,11 @@ public class HomeFragment extends Fragment implements NoInternetInterface, ViewP
 
                             }else
                                 fItem.setImg(item.getString("image"));
-                            if(fItem.getQty()!=null){
-                                fItem.setQty(item.getString("quantity"));
-                            }
-                            else{
-                                fItem.setQty("one");
-                            }
+
                             fItem.setPrice((float) item.getDouble("price"));
-                            fItem.setcategory(item.getInt("category"));
+                            fItem.setCategory(item.getInt("category"));
                             fItem.setQtyType(item.getInt("quantity_type"));
                             fItem.setDesc(item.getString("description"));
-
 
                             typeLists.get(j).add(fItem);
                             HomeRecyclerAdapter ad=adapterList.get(j);

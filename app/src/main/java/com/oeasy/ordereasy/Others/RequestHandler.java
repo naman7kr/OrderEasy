@@ -106,24 +106,28 @@ public class RequestHandler extends OrderEasyApplication {
                 callback = f1;
                 callback.showRefreshLayout();
             }
-            if(f2!=null){
+            else if(f2!=null){
                 callback = f2;
                 callback.showRefreshLayout();
             }
-            if(f3!=null){
+            else if(f3!=null){
                 callback = f3;
                 callback.showRefreshLayout();
             }
-            if(f4!=null){
+            else if(f4!=null){
                 callback = f4;
                 callback.showRefreshLayout();
             }
-            if(f5!=null){
+            else if(f5!=null){
                 callback = f5;
                 callback.showRefreshLayout();
             }
-            if(f6!=null){
+            else if(f6!=null){
                 callback = f6;
+                callback.showRefreshLayout();
+            }
+            else {
+                callback= (NoInternetInterface) mCtx;
                 callback.showRefreshLayout();
             }
         }

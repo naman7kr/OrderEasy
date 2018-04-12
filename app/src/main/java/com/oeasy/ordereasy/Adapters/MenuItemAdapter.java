@@ -18,8 +18,10 @@ import android.widget.TextView;
 
 import com.oeasy.ordereasy.Modals.FoodItem;
 import com.oeasy.ordereasy.Others.Constants;
+import com.oeasy.ordereasy.Others.DatabaseHelper;
 import com.oeasy.ordereasy.Others.Utilities;
 import com.oeasy.ordereasy.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -31,9 +33,12 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
     private ArrayList<FoodItem> list;
     Context context;
     Dialog fDialog;
+    DatabaseHelper db;
+    int alreadyPresent;
     public MenuItemAdapter(Context context, ArrayList<FoodItem> list){
         this.list=list;
         this.context=context;
+        db = new DatabaseHelper(context);
     }
     @Override
     public MenuItemAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -53,12 +58,21 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
             @Override
             public void onClick(View v) {
                 showFoodDialog(context,item);
-
+                alreadyPresent=db.countFoodItem(item);
                 Button addToCart=fDialog.findViewById(R.id.dialog_addbtn);
                 addToCart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //store data in shared preference
+                        if(alreadyPresent==0)
+                            db.createFoodItems(item);
+                        else{
+
+
+                        }
+                        ArrayList<FoodItem> dbResponse=db.getAllFoodItems();
+                        for (int i = 0;i<dbResponse.size();i++){
+                            Log.e("RES",dbResponse.get(i).getName());
+                        }
                         fDialog.dismiss();
                     }
                 });
@@ -96,13 +110,14 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
 
             }
         });
-        if (item.getImg() != null)
-            Utilities.setPicassoImage(context, Constants.IMG_ROOT+item.getImg(), fImg, Constants.SQUA_PLACEHOLDER);
-        price.setText( String.valueOf(item.getPrice()));
+        if (item.getImg() != null) {
+            Picasso.with(context).load(Constants.IMG_ROOT+item.getImg()).into(fImg);
+            Log.e("LOL",Constants.IMG_ROOT+item.getImg());
+        }        price.setText( String.valueOf(item.getPrice()));
         desc.setText(item.getDesc());
         setDialogImage(fImg);
         fName.setText(item.getName());
-        Utilities.setPicassoImage(context, item.getImg(), fImg, Constants.SQUA_PLACEHOLDER);
+
     }
     private void setSpinner(Spinner sp) {
         ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(context,R.array.qty_pieces,android.R.layout.simple_spinner_item);

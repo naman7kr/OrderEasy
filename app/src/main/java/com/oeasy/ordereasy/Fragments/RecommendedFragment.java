@@ -5,12 +5,16 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -21,11 +25,14 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.oeasy.ordereasy.Activities.MenuActivity;
 import com.oeasy.ordereasy.Adapters.HomeRecyclerAdapter;
 import com.oeasy.ordereasy.Adapters.MenuItemAdapter;
+import com.oeasy.ordereasy.Interfaces.MenuBtmSearchInterface;
 import com.oeasy.ordereasy.Interfaces.NoInternetInterface;
 import com.oeasy.ordereasy.Modals.FoodItem;
 import com.oeasy.ordereasy.Others.Constants;
+import com.oeasy.ordereasy.Others.HidingScrollListener;
 import com.oeasy.ordereasy.Others.RequestHandler;
 import com.oeasy.ordereasy.R;
 
@@ -41,7 +48,7 @@ import java.util.Map;
  * Created by Stan on 4/6/2018.
  */
 
-public class RecommendedFragment extends BaseFragment implements NoInternetInterface{
+public class RecommendedFragment extends BaseFragment implements NoInternetInterface,MenuBtmSearchInterface{
     private ArrayList<FoodItem> rList=new ArrayList<>();
     private MenuItemAdapter adapter;
     private RecyclerView rView;
@@ -55,7 +62,7 @@ public class RecommendedFragment extends BaseFragment implements NoInternetInter
         View view=inflater.inflate(R.layout.fragment_recommended,container,false);
         initialize(view);
         setRecView(rView);
-
+        setBtmToolbar();
         loadData();
         return view;
     }
@@ -69,7 +76,8 @@ public class RecommendedFragment extends BaseFragment implements NoInternetInter
         pBar=view.findViewById(R.id.menu_recommended_progress);
         ref= view.findViewById(R.id.tap_to_retry);
         erll=view.findViewById(R.id.no_connection_view);
-        btmToolbar=view.findViewById(R.id.include_toolbar);
+        MenuActivity activity= (MenuActivity) getActivity();
+        btmToolbar=activity.findViewById(R.id.btm_toolbar);
 
         erll.setVisibility(View.GONE);
         rView.setVisibility(View.GONE);
@@ -97,13 +105,13 @@ public class RecommendedFragment extends BaseFragment implements NoInternetInter
                         }else
                             fItem.setImg(item.getString("image"));
                         fItem.setPrice((float) item.getDouble("price"));
-                        fItem.setcategory(item.getInt("category"));
+                        fItem.setCategory(item.getInt("category"));
                         fItem.setQtyType(item.getInt("quantity_type"));
                         fItem.setDesc(item.getString("description"));
                         rList.add(fItem);
                         adapter.notifyDataSetChanged();
                     }
-                    setSearchToolbar(rView,rList,btmToolbar);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -125,6 +133,33 @@ public class RecommendedFragment extends BaseFragment implements NoInternetInter
         };
 
         RequestHandler.getInstance(getContext(),this).addToRequestQueue(request);
+    }
+    private void setBtmToolbar() {
+
+        new MenuBtmSearchInterface() {
+            @Override
+            public void setSearchToolbar() {
+                rView.setOnScrollListener(new HidingScrollListener() {
+                    @Override
+                    public void onHide() {
+
+                        hideViews(btmToolbar);
+
+                    }
+
+                    @Override
+                    public void onShow() {
+                        showViews(btmToolbar);
+                    }
+                });
+
+            }
+
+            @Override
+            public void setToolbarIcon(MenuItem item,SearchView searchView) {
+            }
+        }.setSearchToolbar();
+
     }
     public String getType(int tPos) {
         if(tPos==1){
@@ -178,4 +213,39 @@ public class RecommendedFragment extends BaseFragment implements NoInternetInter
         showRefreshPage();
         onRefresh();
     }
+    @Override
+    public void setSearchToolbar() {
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void setToolbarIcon(MenuItem item,SearchView searchView) {
+
+
+             searchView.setQueryHint("Search in Recommended");
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    ArrayList<FoodItem> tempList = new ArrayList<>();
+                    tempList.clear();
+                    for (FoodItem temp : rList) {
+                        if (temp.getName().toLowerCase().replace(" ","").contains(newText.toLowerCase().replace(" ",""))){
+                            tempList.add(temp);
+                        }
+                    }
+                    MenuItemAdapter adapter = new MenuItemAdapter(getContext(), tempList);
+                    rView.setAdapter(adapter);
+                    return true;
+                }
+            });
+
+
+    }
+
 }

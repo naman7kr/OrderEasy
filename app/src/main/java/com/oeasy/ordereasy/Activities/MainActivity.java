@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.oeasy.ordereasy.Adapters.MainBtmAdapter;
+import com.oeasy.ordereasy.Others.DatabaseHelper;
 import com.oeasy.ordereasy.Others.Utilities;
 import com.oeasy.ordereasy.R;
 
@@ -23,13 +24,14 @@ public class MainActivity extends BaseActivity {
     private ViewPager mPager;
     private BottomNavigationView mBtmNav;
     MainBtmAdapter adapter;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        DatabaseHelper db=new DatabaseHelper(this);
+//        db.deleteAllWaiters();
+//        db.onUpgrade(db.getWritableDatabase(),1,1);
         initialize();
 
         setToolbar();
@@ -155,7 +157,4 @@ public class MainActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-
 }

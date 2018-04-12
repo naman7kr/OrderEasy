@@ -23,5 +23,14 @@
         android:id="@+id/menu_vp"
         android:layout_below="@+id/menu_tabs"
         />
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:id="@+id/btm_toolbar"
+        android:layout_alignParentBottom="true"
+        />
 
 </RelativeLayout>
