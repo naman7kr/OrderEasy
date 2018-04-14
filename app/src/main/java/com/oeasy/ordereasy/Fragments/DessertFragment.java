@@ -112,6 +112,7 @@ public class DessertFragment extends BaseFragment implements NoInternetInterface
                             fItem.setCategory(item.getInt("category"));
                             fItem.setQtyType(item.getInt("quantity_type"));
                             fItem.setDesc(item.getString("description"));
+                            fItem.setFid(item.getInt("id"));
                             desList.add(fItem);
                             adapter.notifyDataSetChanged();
                         }

@@ -112,6 +112,7 @@ public class StartersFragment extends BaseFragment implements NoInternetInterfac
                         fItem.setCategory(item.getInt("category"));
                         fItem.setQtyType(item.getInt("quantity_type"));
                         fItem.setDesc(item.getString("description"));
+                        fItem.setFid(item.getInt("id"));
                         sList.add(fItem);
                         adapter.notifyDataSetChanged();
 

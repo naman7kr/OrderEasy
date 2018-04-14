@@ -108,6 +108,7 @@ public class RecommendedFragment extends BaseFragment implements NoInternetInter
                         fItem.setCategory(item.getInt("category"));
                         fItem.setQtyType(item.getInt("quantity_type"));
                         fItem.setDesc(item.getString("description"));
+                        fItem.setFid(item.getInt("id"));
                         rList.add(fItem);
                         adapter.notifyDataSetChanged();
                     }

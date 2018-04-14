@@ -78,7 +78,6 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
         if(Build.VERSION.SDK_INT<=23)
         sView.startCamera();
         sView.setResultHandler(this);
-        Log.e("QR","HM");
 
     }
 

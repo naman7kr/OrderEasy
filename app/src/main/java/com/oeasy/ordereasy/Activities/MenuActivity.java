@@ -138,7 +138,6 @@ public class MenuActivity extends BaseActivity {
         addTabs();
         mPager.setAdapter(adapter);
         mTab.setupWithViewPager(mPager);
-
     }
 
     private void addTabs() {

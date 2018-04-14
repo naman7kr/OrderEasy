@@ -109,6 +109,7 @@ public class DrinksFragment extends BaseFragment implements NoInternetInterface,
                         fItem.setCategory(item.getInt("category"));
                         fItem.setQtyType(item.getInt("quantity_type"));
                         fItem.setDesc(item.getString("description"));
+                        fItem.setFid(item.getInt("id"));
                         dList.add(fItem);
                         adapter.notifyDataSetChanged();
 

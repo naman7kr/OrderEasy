@@ -112,6 +112,7 @@ public class MainCourseFragment extends BaseFragment implements NoInternetInterf
                         fItem.setCategory(item.getInt("category"));
                         fItem.setQtyType(item.getInt("quantity_type"));
                         fItem.setDesc(item.getString("description"));
+                        fItem.setFid(item.getInt("id"));
                         mcList.add(fItem);
                         adapter.notifyDataSetChanged();
 

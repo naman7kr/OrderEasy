@@ -36,6 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_WAITER="waiter";
 
     // Common column names
+    private static final String KEY_FOOD_ID="food_id";
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
     private static final String KEY_CATEGORY = "category";
@@ -55,7 +56,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             +KEY_NAME+" varchar(100), "+ KEY_CATEGORY +" INTEGER, "
             + KEY_DESCRIPTION+" varchar(255), " +KEY_PRICE+" float, "
             +KEY_QUANTITY_TYPE +" int, "+ KEY_IMAGE+" varchar(100), "
-            +KEY_QTY+" varchar(50)"+")";
+            +KEY_QTY+" varchar(50), "+KEY_FOOD_ID + " INTEGER)";
     private static final String CREATE_TABLE_WAITER = "CREATE TABLE " + TABLE_WAITER
             +"("+KEY_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, "
             +KEY_NAME + " varchar(100), "+ KEY_CONTACT_NO+" varchar(13), "
@@ -93,6 +94,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_QUANTITY_TYPE,fItem.getQtyType());
         values.put(KEY_QTY,fItem.getQty());
         values.put(KEY_PRICE,fItem.getPrice());
+        values.put(KEY_FOOD_ID,fItem.getFid());
         // insert row
         db.insert(TABLE_FOOD_ITEMS, null, values);
         db.close();
@@ -142,6 +144,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 item.setQty(c.getString(c.getColumnIndex(KEY_QTY)));
                 item.setCategory(c.getInt(c.getColumnIndex(KEY_CATEGORY)));
                 item.setImg(c.getString(c.getColumnIndex(KEY_IMAGE)));
+                item.setFid(c.getInt(c.getColumnIndex(KEY_FOOD_ID)));
 
                 // adding to todo list
                 items.add(item);
@@ -176,7 +179,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     public void deleteFoodItem(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM "+TABLE_FOOD_ITEMS+" WHERE "+KEY_ID+"='"+id+"'");
+        db.execSQL("DELETE FROM "+TABLE_FOOD_ITEMS+" WHERE "+KEY_FOOD_ID+"='"+id+"'");
         db.close();
     }
     public void deleteAllFoodItems(){

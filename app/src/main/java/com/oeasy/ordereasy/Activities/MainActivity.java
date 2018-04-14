@@ -24,14 +24,15 @@ public class MainActivity extends BaseActivity {
     private ViewPager mPager;
     private BottomNavigationView mBtmNav;
     MainBtmAdapter adapter;
+    DatabaseHelper db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 //        DatabaseHelper db=new DatabaseHelper(this);
-//        db.deleteAllWaiters();
-//        db.onUpgrade(db.getWritableDatabase(),1,1);
+
+
         initialize();
 
         setToolbar();
@@ -45,7 +46,7 @@ public class MainActivity extends BaseActivity {
     private void initialize() {
         mPager=findViewById(R.id.main_vp);
         mBtmNav=findViewById(R.id.main_btmnav);
-
+        db=new DatabaseHelper(this);
     }
 
     private void setToolbar() {
@@ -64,6 +65,15 @@ public class MainActivity extends BaseActivity {
     private void setFab() {
         fab=getFab();
         onFabClick();
+        checkWaiter();
+    }
+
+    private void checkWaiter() {
+        if(db.countWaiter()!=0){
+            fab.setVisibility(View.GONE);
+        }else {
+            fab.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

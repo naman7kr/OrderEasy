@@ -23,6 +23,16 @@ public class FoodItem {
     private float price;
     private int qtyType;
     private String qty;
+    private int fid;
+
+    public void setFid(int fid) {
+        this.fid = fid;
+    }
+
+    public int getFid() {
+
+        return fid;
+    }
 
     public void setCategory(int category) {
         this.category = category;

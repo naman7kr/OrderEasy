@@ -22,6 +22,4 @@ public class Constants {
     public static final int QTY_PIECES=0;
     public static final int QTY_PLATE=1;
     public static final int QTY_LITRE=2;
-
-
 }
