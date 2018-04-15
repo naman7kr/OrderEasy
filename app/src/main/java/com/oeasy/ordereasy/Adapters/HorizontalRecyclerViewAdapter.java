@@ -1,5 +1,6 @@
 package com.oeasy.ordereasy.Adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +22,10 @@ import java.util.ArrayList;
 public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<HorizontalRecyclerViewAdapter.MessageViewHolder> {
 
     private ArrayList<WaiterModel> mArrayList;
-
-    public HorizontalRecyclerViewAdapter(ArrayList<WaiterModel> waiterModels) {
+    private Context context;
+    public HorizontalRecyclerViewAdapter(Context context,ArrayList<WaiterModel> waiterModels) {
         this.mArrayList=waiterModels;
+        this.context=context;
     }
     @Override
     public int getItemViewType(int position) {
@@ -40,7 +42,7 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Horizont
     public void onBindViewHolder(MessageViewHolder holder, int position) {
         final WaiterModel waiterModel=mArrayList.get(position);
         MessageViewHolder messageViewHolder =holder;
-        messageViewHolder.textView.setText(waiterModel.getName());
+        messageViewHolder.wName.setText(waiterModel.getName());
 
     }
 
@@ -53,10 +55,10 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Horizont
 
 
     public class MessageViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+        TextView wName;
         private MessageViewHolder(View view) {
             super(view);
-            textView=view.findViewById(R.id.cart_waiter_name);
+            wName=view.findViewById(R.id.cart_waiter_name);
         }
     }
 }

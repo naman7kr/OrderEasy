@@ -94,7 +94,7 @@ public class DrinksFragment extends BaseFragment implements NoInternetInterface,
                 pBar.setVisibility(View.GONE);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    JSONArray fType = jsonObject.getJSONArray( getType(Constants.DRINKS));
+                    JSONArray fType = jsonObject.getJSONArray("food_items");
                     dList.clear();
                     for (int i = 0; i < fType.length(); i++) {
                         JSONObject item = fType.getJSONObject(i);
@@ -110,8 +110,11 @@ public class DrinksFragment extends BaseFragment implements NoInternetInterface,
                         fItem.setQtyType(item.getInt("quantity_type"));
                         fItem.setDesc(item.getString("description"));
                         fItem.setFid(item.getInt("id"));
-                        dList.add(fItem);
-                        adapter.notifyDataSetChanged();
+                        fItem.setType(item.getInt("item_type"));
+                        if(fItem.getType()==Constants.DRINKS){
+                            dList.add(fItem);
+                            adapter.notifyDataSetChanged();
+                        }
 
 
                     }
@@ -167,21 +170,7 @@ public class DrinksFragment extends BaseFragment implements NoInternetInterface,
         }.setSearchToolbar();
 
     }
-    public String getType(int tPos) {
-        if(tPos==1){
-            return "starters";
-        }
-        if(tPos==2){
-            return "main_course";
-        }
-        if(tPos==3){
-            return "dessert";
-        }
-        if(tPos==4){
-            return "drinks";
-        }
-        return null;
-    }
+
     private void onRefresh() {
 
         ref.setOnClickListener(new View.OnClickListener() {

@@ -97,7 +97,7 @@ public class DessertFragment extends BaseFragment implements NoInternetInterface
                 pBar.setVisibility(View.GONE);
                 try {
                         JSONObject jsonObject = new JSONObject(response);
-                        JSONArray fType = jsonObject.getJSONArray( getType(Constants.DESSERT));
+                        JSONArray fType = jsonObject.getJSONArray("food_items");
                         desList.clear();
                         for (int i = 0; i < fType.length(); i++) {
                             JSONObject item = fType.getJSONObject(i);
@@ -113,8 +113,11 @@ public class DessertFragment extends BaseFragment implements NoInternetInterface
                             fItem.setQtyType(item.getInt("quantity_type"));
                             fItem.setDesc(item.getString("description"));
                             fItem.setFid(item.getInt("id"));
-                            desList.add(fItem);
-                            adapter.notifyDataSetChanged();
+                            fItem.setType(item.getInt("item_type"));
+                            if(fItem.getType()==Constants.DESSERT){
+                                desList.add(fItem);
+                                adapter.notifyDataSetChanged();
+                            }
                         }
                     setBtmToolbar();
 
@@ -168,21 +171,7 @@ public class DessertFragment extends BaseFragment implements NoInternetInterface
 
     }
 
-    public String getType(int tPos) {
-        if(tPos==1){
-            return "starters";
-        }
-        if(tPos==2){
-            return "main_course";
-        }
-        if(tPos==3){
-            return "dessert";
-        }
-        if(tPos==4){
-            return "drinks";
-        }
-        return null;
-    }
+
 
     private void onRefresh() {
 

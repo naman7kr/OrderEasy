@@ -64,9 +64,9 @@ public class HomeFragment extends Fragment implements NoInternetInterface, ViewP
     private boolean firstScroll = true;
     private Runnable runnable;
     private RecyclerView rView;
-   private ArrayList<HomeRecyclerAdapter> adapterList=new ArrayList<>();
-   private ArrayList<ArrayList<FoodItem>> typeLists=new ArrayList<>();
-   private HomeRecyclerAdapter adapter;
+    private ArrayList<HomeRecyclerAdapter> adapterList=new ArrayList<>();
+    private ArrayList<ArrayList<FoodItem>> typeLists=new ArrayList<>();
+    private HomeRecyclerAdapter adapter;
     private TextView seeAll;
     private LinearLayout erll;
     private ScrollView homell;
@@ -80,8 +80,6 @@ public class HomeFragment extends Fragment implements NoInternetInterface, ViewP
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_fragemnt, container, false);
         initialize(view);
-
-        setSlider(view);
         setRecomended(view);
         setStarters(view);
         setMainCourse(view);
@@ -114,55 +112,32 @@ public class HomeFragment extends Fragment implements NoInternetInterface, ViewP
                 homell.setVisibility(View.VISIBLE);
                 pBar.setVisibility(View.GONE);
                 try {
-                    for (int j = 1; j <= 4; j++) {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray fType = jsonObject.getJSONArray("food_items");
 
-                        JSONObject jsonObject = new JSONObject(response);
-                        JSONArray fType = jsonObject.getJSONArray( getType(j));
-                        typeLists.get(j).clear();
-                        for (int i = 0; i < fType.length(); i++) {
-                            JSONObject item = fType.getJSONObject(i);
+                    for (int i = 0; i < fType.length(); i++) {
+                        JSONObject item = fType.getJSONObject(i);
 
-                            FoodItem fItem=new FoodItem();
-                            fItem.setName(item.getString("name"));
-                            if(item.getString("image").compareTo("")==0){
-                                fItem.setImg("R.drawable.placeholder_square");
+                        FoodItem fItem = new FoodItem();
+                        fItem.setName(item.getString("name"));
+                        if (item.getString("image").compareTo("") == 0) {
+                            fItem.setImg("R.drawable.placeholder_square");
 
-                            }else
-                                fItem.setImg(item.getString("image"));
+                        } else
+                            fItem.setImg(item.getString("image"));
 
-                            fItem.setPrice((float) item.getDouble("price"));
-                            fItem.setCategory(item.getInt("category"));
-                            fItem.setQtyType(item.getInt("quantity_type"));
-                            fItem.setDesc(item.getString("description"));
-                            fItem.setFid(item.getInt("id"));
-                            typeLists.get(j).add(fItem);
-                            HomeRecyclerAdapter ad=adapterList.get(j);
-                            ad.notifyDataSetChanged();
-                        }
-                        String img[]={"ic_slider1.jpg","ic_slider2.jpg","ic_slider3.jpg"};
-                        sliderVP.setAdapter(new HomeSliderAdapter(getContext(), img));
-                        indicator.setViewPager(sliderVP);
-                        sliderVP.setOnPageChangeListener(HomeFragment.this);
-                        try{
-                            Field mScroller = ViewPager.class.getDeclaredField("mScroller");
-                            mScroller.setAccessible(true);
-                            mScroller.set(sliderVP, new CustomScroller(sliderVP.getContext(),BANNER_TRANSITION_DELAY ));
-                        } catch (Exception e){}
-
-                        handler = new Handler(Looper.getMainLooper());
-                        runnable = new Runnable() {
-                            @Override
-                            public void run() {
-                                int currItem = sliderVP.getCurrentItem();
-                                if (currItem == 2){
-                                    sliderVP.setCurrentItem(0);
-                                } else {
-                                    sliderVP.setCurrentItem(++currItem);
-                                }
-                            }
-                        };
-                        handler.postDelayed(runnable, BANNER_DELAY_TIME);
+                        fItem.setPrice((float) item.getDouble("price"));
+                        fItem.setCategory(item.getInt("category"));
+                        fItem.setQtyType(item.getInt("quantity_type"));
+                        fItem.setDesc(item.getString("description"));
+                        fItem.setFid(item.getInt("id"));
+                        fItem.setType(item.getInt("item_type"));
+                        typeLists.get(fItem.getType()).add(fItem);
+                        Log.e("LOL", String.valueOf(fItem.getType()));
+                        HomeRecyclerAdapter ad = adapterList.get(fItem.getType());
+                        ad.notifyDataSetChanged();
                     }
+                    setSlider();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -187,9 +162,32 @@ public class HomeFragment extends Fragment implements NoInternetInterface, ViewP
     }
 
 
-    private void setSlider(View view) {
+    private void setSlider() {
+        String img[]={"ic_slider1.jpg","ic_slider2.jpg","ic_slider3.jpg"};
+        sliderVP.setAdapter(new HomeSliderAdapter(getContext(), img));
+        indicator.setViewPager(sliderVP);
+        sliderVP.setOnPageChangeListener(HomeFragment.this);
+        try{
+            Field mScroller = ViewPager.class.getDeclaredField("mScroller");
+            mScroller.setAccessible(true);
+            mScroller.set(sliderVP, new CustomScroller(sliderVP.getContext(),BANNER_TRANSITION_DELAY ));
+        } catch (Exception e){}
 
+        handler = new Handler(Looper.getMainLooper());
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                int currItem = sliderVP.getCurrentItem();
+                if (currItem == 2){
+                    sliderVP.setCurrentItem(0);
+                } else {
+                    sliderVP.setCurrentItem(++currItem);
+                }
+            }
+        };
+        handler.postDelayed(runnable, BANNER_DELAY_TIME);
     }
+
     public void setRecomended(View view) {
 
         seeAll=view.findViewById(R.id.home_rec_seeall);
@@ -198,7 +196,7 @@ public class HomeFragment extends Fragment implements NoInternetInterface, ViewP
         rView = view.findViewById(R.id.home_recommended);
         rView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         adapter = new HomeRecyclerAdapter(getContext(),RECOMMENDED_FLAG , getFoodItem(Constants.RECOMMENDED));
-        adapterList.add(adapter);
+        //adapterList.add(adapter);
         rView.setAdapter(adapter);
     }
     private void setStarters(View view) {
@@ -263,21 +261,6 @@ public class HomeFragment extends Fragment implements NoInternetInterface, ViewP
         return typeLists.get(type);
     }
 
-    public String getType(int tPos) {
-       if(tPos==1){
-           return "starters";
-       }
-       if(tPos==2){
-           return "main_course";
-       }
-       if(tPos==3){
-           return "dessert";
-       }
-       if(tPos==4){
-           return "drinks";
-       }
-       return null;
-    }
     @Override
     public void showRefreshLayout() {
         hideLayout();
@@ -337,4 +320,6 @@ public class HomeFragment extends Fragment implements NoInternetInterface, ViewP
             handler.postDelayed(runnable, BANNER_DELAY_TIME);
         }
     }
+
+
 }

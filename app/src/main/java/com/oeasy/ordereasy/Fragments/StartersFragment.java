@@ -97,7 +97,7 @@ public class StartersFragment extends BaseFragment implements NoInternetInterfac
                 pBar.setVisibility(View.GONE);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    JSONArray fType = jsonObject.getJSONArray( getType(Constants.STARTERS));
+                    JSONArray fType = jsonObject.getJSONArray("food_items");
                     sList.clear();
                     for (int i = 0; i < fType.length(); i++) {
                         JSONObject item = fType.getJSONObject(i);
@@ -113,8 +113,11 @@ public class StartersFragment extends BaseFragment implements NoInternetInterfac
                         fItem.setQtyType(item.getInt("quantity_type"));
                         fItem.setDesc(item.getString("description"));
                         fItem.setFid(item.getInt("id"));
-                        sList.add(fItem);
-                        adapter.notifyDataSetChanged();
+                        fItem.setType(item.getInt("item_type"));
+                        if(fItem.getType()==Constants.STARTERS){
+                            sList.add(fItem);
+                            adapter.notifyDataSetChanged();
+                        }
 
                     }
 

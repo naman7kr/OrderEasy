@@ -97,7 +97,7 @@ public class MainCourseFragment extends BaseFragment implements NoInternetInterf
                 pBar.setVisibility(View.GONE);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    JSONArray fType = jsonObject.getJSONArray( getType(Constants.MAIN_COURSE));
+                    JSONArray fType = jsonObject.getJSONArray("food_items");
                     mcList.clear();
                     for (int i = 0; i < fType.length(); i++) {
                         JSONObject item = fType.getJSONObject(i);
@@ -113,8 +113,11 @@ public class MainCourseFragment extends BaseFragment implements NoInternetInterf
                         fItem.setQtyType(item.getInt("quantity_type"));
                         fItem.setDesc(item.getString("description"));
                         fItem.setFid(item.getInt("id"));
-                        mcList.add(fItem);
-                        adapter.notifyDataSetChanged();
+                        fItem.setType(item.getInt("item_type"));
+                        if(fItem.getType()==Constants.MAIN_COURSE){
+                            mcList.add(fItem);
+                            adapter.notifyDataSetChanged();
+                        }
 
                     }
                     setBtmToolbar();
@@ -167,21 +170,7 @@ public class MainCourseFragment extends BaseFragment implements NoInternetInterf
         }.setSearchToolbar();
 
     }
-    public String getType(int tPos) {
-        if(tPos==1){
-            return "starters";
-        }
-        if(tPos==2){
-            return "main_course";
-        }
-        if(tPos==3){
-            return "dessert";
-        }
-        if(tPos==4){
-            return "drinks";
-        }
-        return null;
-    }
+
     private void onRefresh() {
 
         ref.setOnClickListener(new View.OnClickListener() {

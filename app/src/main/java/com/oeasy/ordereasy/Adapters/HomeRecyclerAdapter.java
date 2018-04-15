@@ -68,7 +68,6 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
                 addToCart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //store data in sqlite
                         if(alreadyPresent==0)
                          db.createFoodItems(current);
                         else{

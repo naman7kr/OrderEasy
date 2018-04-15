@@ -1,13 +1,23 @@
 package com.oeasy.ordereasy.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
+import com.oeasy.ordereasy.Adapters.CartTabsAdapter;
 import com.oeasy.ordereasy.Adapters.HorizontalRecyclerViewAdapter;
+import com.oeasy.ordereasy.Adapters.MenuTabsAdapter;
 import com.oeasy.ordereasy.Adapters.VerticalRecyclerViewAdapter;
+import com.oeasy.ordereasy.Fragments.PlaceOrderFragment;
+import com.oeasy.ordereasy.Fragments.PreviewFragment;
+import com.oeasy.ordereasy.Fragments.RecommendedFragment;
+import com.oeasy.ordereasy.Fragments.StartersFragment;
 import com.oeasy.ordereasy.Modals.FoodItem;
 import com.oeasy.ordereasy.Modals.WaiterModel;
 import com.oeasy.ordereasy.Others.DatabaseHelper;
@@ -21,15 +31,12 @@ import java.util.ArrayList;
 
 public class CartActivity extends BaseActivity {
 
-    private RecyclerView mHorizontalRecyclerView;
-    private LinearLayoutManager horizontalLayoutManager;
-    private HorizontalRecyclerViewAdapter horizontalAdapter;
 
-    private RecyclerView mVerticalRecyclerView;
-    private LinearLayoutManager verticalLayoutManager;
-    private VerticalRecyclerViewAdapter verticalAdapter;
-    private DatabaseHelper db;
-    ArrayList<FoodItem> arrayList;
+    private CartTabsAdapter adapter;
+
+
+    private ViewPager mPager;
+    private TabLayout mTab;
 
 
     @Override
@@ -37,32 +44,40 @@ public class CartActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
         initialize();
-
-        horizontalAdapter = new HorizontalRecyclerViewAdapter(fillWithData());
-        horizontalLayoutManager = new LinearLayoutManager(CartActivity.this, LinearLayoutManager.HORIZONTAL, false);
-        mHorizontalRecyclerView.setLayoutManager(horizontalLayoutManager);
-        mHorizontalRecyclerView.setAdapter(horizontalAdapter);
-
-
-        verticalAdapter = new VerticalRecyclerViewAdapter(fillWithDatav());
-        verticalLayoutManager = new LinearLayoutManager(CartActivity.this, LinearLayoutManager.VERTICAL, false);
-        mVerticalRecyclerView.setLayoutManager(verticalLayoutManager);
-        mVerticalRecyclerView.setAdapter(verticalAdapter);
-        getItems();
-
-
+        setToolbar();
+        setTabs();
     }
-
     private void initialize() {
-        mVerticalRecyclerView=findViewById(R.id.verticalRecyclerView);
-        mHorizontalRecyclerView = (RecyclerView) findViewById(R.id.horizontalRecyclerView);
-        db = new DatabaseHelper(this);
-        arrayList=new ArrayList<>();
+        mTab=findViewById(R.id.cart_tabs);
+        mPager=findViewById(R.id.cart_vp);
+        adapter=new CartTabsAdapter(this,getSupportFragmentManager());
+
+
+    }
+    private void setTabs() {
+        addTabs();
+        mPager.setAdapter(adapter);
+        mTab.setupWithViewPager(mPager);
     }
 
-    private ArrayList<FoodItem> fillWithDatav() {
-        arrayList=new ArrayList<>();
-        return arrayList;
+    private void addTabs() {
+        adapter.addFragment(new PreviewFragment(), "Preview");
+        adapter.addFragment(new PlaceOrderFragment(), "Place Order");
+    }
+
+    private void setToolbar() {
+        toolbar=getToolbar();
+        getSupportActionBar().setTitle("Cart");
+        toolbar.setNavigationIcon(R.drawable.ic_action_home);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            }
+        });
     }
 
     public ArrayList<WaiterModel> fillWithData() {
@@ -95,17 +110,5 @@ public class CartActivity extends BaseActivity {
         return  imageModelArrayList;
     }
 
-    public void getItems() {
-       ArrayList<FoodItem> list=db.getAllFoodItems();
-       for(int i =0 ;i<list.size();i++){
-           arrayList.add(list.get(i));
-           horizontalAdapter.notifyDataSetChanged();
-           verticalAdapter.notifyDataSetChanged();
-       }
 
-        Log.e("LOL", String.valueOf(list.size()));
-       horizontalAdapter.notifyDataSetChanged();
-       verticalAdapter.notifyDataSetChanged();
-
-    }
 }

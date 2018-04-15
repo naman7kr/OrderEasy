@@ -79,7 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // on upgrade drop older tables
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FOOD_ITEMS);
-        db.execSQL("DROP TABLE IF EXISTS "+ TABLE_FOOD_ITEMS);
+        db.execSQL("DROP TABLE IF EXISTS "+ TABLE_WAITER);
         // create new tables
         onCreate(db);
     }
