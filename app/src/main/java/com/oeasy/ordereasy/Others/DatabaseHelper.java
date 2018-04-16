@@ -4,21 +4,17 @@ package com.oeasy.ordereasy.Others;
  * Created by Stan on 4/10/2018.
  */
 
-        import java.text.SimpleDateFormat;
-        import java.util.ArrayList;
-        import java.util.Date;
-        import java.util.List;
-        import java.util.Locale;
-
         import android.content.ContentValues;
-        import android.content.Context;
-        import android.database.Cursor;
-        import android.database.sqlite.SQLiteDatabase;
-        import android.database.sqlite.SQLiteOpenHelper;
-        import android.util.Log;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
-        import com.oeasy.ordereasy.Modals.FoodItem;
-        import com.oeasy.ordereasy.Modals.WaiterModel;
+import com.oeasy.ordereasy.Modals.FoodItem;
+import com.oeasy.ordereasy.Modals.WaiterModel;
+
+import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -48,6 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_CONTACT_NO="contact_no";
     private static final String KEY_TABLE_NO="table_no";
     private static final String KEY_WAITER_ID="waiter_id";
+    private static final String KEY_RATING="rating";
 
     // Table Create Statements
 
@@ -56,7 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             +KEY_NAME+" varchar(100), "+ KEY_CATEGORY +" INTEGER, "
             + KEY_DESCRIPTION+" varchar(255), " +KEY_PRICE+" float, "
             +KEY_QUANTITY_TYPE +" int, "+ KEY_IMAGE+" varchar(100), "
-            +KEY_QTY+" varchar(50), "+KEY_FOOD_ID + " INTEGER)";
+            +KEY_QTY+" varchar(50), "+KEY_FOOD_ID + " INTEGER, "+KEY_RATING+" FLOAT(1,1))";
     private static final String CREATE_TABLE_WAITER = "CREATE TABLE " + TABLE_WAITER
             +"("+KEY_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, "
             +KEY_NAME + " varchar(100), "+ KEY_CONTACT_NO+" varchar(13), "
@@ -95,6 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_QTY,fItem.getQty());
         values.put(KEY_PRICE,fItem.getPrice());
         values.put(KEY_FOOD_ID,fItem.getFid());
+        values.put(KEY_RATING,fItem.getRating());
         // insert row
         db.insert(TABLE_FOOD_ITEMS, null, values);
         db.close();
@@ -127,6 +125,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return count;
     }
+    public void setRating(int id,float rating){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query="UPDATE "+ TABLE_FOOD_ITEMS+ " SET "+KEY_RATING+"="+"'"+rating+"'"+" WHERE "+KEY_FOOD_ID+"="+"'"+id+"'";
+        db.execSQL(query);
+    }
     public ArrayList<FoodItem> getAllFoodItems() {
         ArrayList<FoodItem> items = new ArrayList<FoodItem>();
         String selectQuery = "SELECT  * FROM " + TABLE_FOOD_ITEMS;
@@ -145,6 +148,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 item.setCategory(c.getInt(c.getColumnIndex(KEY_CATEGORY)));
                 item.setImg(c.getString(c.getColumnIndex(KEY_IMAGE)));
                 item.setFid(c.getInt(c.getColumnIndex(KEY_FOOD_ID)));
+                item.setRating(c.getFloat(c.getColumnIndex(KEY_RATING)));
+                item.setPrice(c.getFloat(c.getColumnIndex(KEY_PRICE)));
 
                 // adding to todo list
                 items.add(item);

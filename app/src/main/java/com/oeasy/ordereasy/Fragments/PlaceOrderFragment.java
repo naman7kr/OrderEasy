@@ -62,6 +62,5 @@ public class PlaceOrderFragment extends Fragment {
             adapter.notifyDataSetChanged();
         }
         adapter.notifyDataSetChanged();
-        Log.e("LOL","LOL");
     }
 }

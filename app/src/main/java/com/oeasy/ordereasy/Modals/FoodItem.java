@@ -1,5 +1,7 @@
 package com.oeasy.ordereasy.Modals;
 
+import org.json.JSONObject;
+
 /**
  * Created by Stan on 4/5/2018.
  */
@@ -24,6 +26,15 @@ public class FoodItem {
     private int qtyType;
     private String qty;
     private int fid;
+    private float rating;
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
 
     public void setFid(int fid) {
         this.fid = fid;
@@ -109,5 +120,13 @@ public class FoodItem {
         this.name = name;
     }
 
-
+    public JSONObject getJSONObject(){
+        JSONObject obj=new JSONObject();
+        try {
+            obj.put("food_id",getFid());
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return obj;
+    }
 }

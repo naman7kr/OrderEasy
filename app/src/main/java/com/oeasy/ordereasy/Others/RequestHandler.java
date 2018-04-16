@@ -1,7 +1,6 @@
 package com.oeasy.ordereasy.Others;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -12,6 +11,7 @@ import com.oeasy.ordereasy.Fragments.DessertFragment;
 import com.oeasy.ordereasy.Fragments.DrinksFragment;
 import com.oeasy.ordereasy.Fragments.HomeFragment;
 import com.oeasy.ordereasy.Fragments.MainCourseFragment;
+import com.oeasy.ordereasy.Fragments.PreviewFragment;
 import com.oeasy.ordereasy.Fragments.RecommendedFragment;
 import com.oeasy.ordereasy.Fragments.StartersFragment;
 import com.oeasy.ordereasy.Interfaces.NoInternetInterface;
@@ -32,6 +32,7 @@ public class RequestHandler extends OrderEasyApplication {
     public static DrinksFragment f5;
     public static RecommendedFragment f6;
     public static BreadFragment f7;
+    public static PreviewFragment f8;
 
 
     private RequestHandler(Context context) {
@@ -57,6 +58,13 @@ public class RequestHandler extends OrderEasyApplication {
             mInstance = new RequestHandler(context);
         }
         f7= f;
+        return mInstance;
+    }
+    public static synchronized RequestHandler getInstance(Context context,PreviewFragment f) {
+        if (mInstance == null) {
+            mInstance = new RequestHandler(context);
+        }
+        f8= f;
         return mInstance;
     }
     public static synchronized RequestHandler getInstance(Context context,MainCourseFragment f) {
@@ -137,6 +145,10 @@ public class RequestHandler extends OrderEasyApplication {
             }
             else if(f7!=null){
                 callback = f7;
+                callback.showRefreshLayout();
+            }
+            else if(f8!=null){
+                callback = (NoInternetInterface) f8;
                 callback.showRefreshLayout();
             }
             else {

@@ -7,6 +7,11 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -14,7 +19,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.oeasy.ordereasy.Modals.UserInformation;
+import com.oeasy.ordereasy.Others.Constants;
+import com.oeasy.ordereasy.Others.RequestHandler;
 import com.oeasy.ordereasy.R;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Stan on 4/7/2018.
@@ -78,10 +91,42 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if(account!=null)
         {
             /*TODO Auto redirect to home page*/
+            UserInformation uInfo=new UserInformation();
+            uInfo.setEmail(account.getEmail());
+            uInfo.setUsername(account.getDisplayName());
+            uInfo.setUserImg(String.valueOf(account.getPhotoUrl()));
+            JSONObject jsonObject=uInfo.getJSONObject();
+
+            sendUserInformationToDatabase(jsonObject);
+
             startActivity(new Intent(this,MainActivity.class));
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             finish();
         }
+    }
+
+    private void sendUserInformationToDatabase(final JSONObject jsonObject) {
+
+            StringRequest request=new StringRequest(Request.Method.POST, Constants.URL_PROCESS_REQUEST, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params= new HashMap<>();
+                    params.put("user_entry",jsonObject.toString() );
+                    return params;
+                }
+            };
+
+            RequestHandler.getInstance(this).addToRequestQueue(request);
+
     }
 
 

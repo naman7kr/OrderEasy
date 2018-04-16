@@ -1,17 +1,19 @@
 package com.oeasy.ordereasy.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.oeasy.ordereasy.Modals.FoodItem;
-import com.oeasy.ordereasy.Modals.WaiterModel;
 import com.oeasy.ordereasy.Others.Constants;
+import com.oeasy.ordereasy.Others.DatabaseHelper;
 import com.oeasy.ordereasy.Others.Utilities;
 import com.oeasy.ordereasy.R;
 
@@ -25,10 +27,12 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
 
     private ArrayList<FoodItem> foodItemArrayList;
     private Context context;
+    private DatabaseHelper db;
 
     public VerticalRecyclerViewAdapter(Context context,ArrayList<FoodItem> foodItems) {
         this.foodItemArrayList=foodItems;
         this.context=context;
+        db=new DatabaseHelper(context);
     }
 
     @Override
@@ -43,14 +47,32 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
     }
 
     @Override
-    public void onBindViewHolder(MessageViewHolder holder, int position) {
-        final FoodItem foodItem=foodItemArrayList.get(position);
+    public void onBindViewHolder(final MessageViewHolder holder, final int position) {
+        final FoodItem fdItem=foodItemArrayList.get(position);
         VerticalRecyclerViewAdapter.MessageViewHolder messageViewHolder =holder;
-        messageViewHolder.fName.setText(foodItem.getName());
-        messageViewHolder.fDescription.setText(foodItem.getDesc());
-        if (foodItem.getImg() != null)
-            Utilities.setPicassoImage(context, Constants.IMG_ROOT+foodItem.getImg(), holder.fImage, Constants.SQUA_PLACEHOLDER);
-        messageViewHolder.fPrice.setText(String.valueOf(foodItem.getPrice()));
+        messageViewHolder.fName.setText(fdItem.getName());
+        messageViewHolder.fDescription.setText(fdItem.getDesc());
+        messageViewHolder.rBar.setRating(fdItem.getRating());
+        messageViewHolder.remBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.deleteFoodItem(fdItem.getFid());
+                foodItemArrayList.remove(position);
+                notifyItemRemoved(position);
+                notifyDataSetChanged();
+            }
+        });
+        if (fdItem.getImg() != null)
+            Utilities.setPicassoImage(context, Constants.IMG_ROOT+fdItem.getImg(), holder.fImage, Constants.SQUA_PLACEHOLDER);
+        messageViewHolder.fPrice.setText(String.valueOf(fdItem.getPrice()));
+        messageViewHolder.rBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                holder.rBar.setIsIndicator(false);
+                db.setRating(fdItem.getFid(),rating);
+
+            }
+        });
     }
 
     @Override
@@ -64,6 +86,8 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
         ImageView fImage;
         TextView fPrice;
         Spinner qtySp;
+        RatingBar rBar;
+        TextView remBtn;
         public MessageViewHolder(View itemView) {
             super(itemView);
             initialize(itemView);
@@ -75,6 +99,9 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
             fImage=itemView.findViewById(R.id.cart_item_img);
             fPrice=itemView.findViewById(R.id.cart_item_price);
             qtySp=itemView.findViewById(R.id.cart_item_qty_spinner);
+            rBar=itemView.findViewById(R.id.cart_rating_bar);
+            remBtn=itemView.findViewById(R.id.cart_item_remove_btn);
+            remBtn.setTextColor(Color.RED);
         }
     }
 }

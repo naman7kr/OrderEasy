@@ -165,7 +165,7 @@ public class RecommendedFragment extends BaseFragment implements NoInternetInter
         }.setSearchToolbar();
 
     }
-  
+
     private void onRefresh() {
 
         ref.setOnClickListener(new View.OnClickListener() {
