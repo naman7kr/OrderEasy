@@ -15,6 +15,7 @@ import android.view.View;
 
 import com.oeasy.ordereasy.Adapters.MenuTabsAdapter;
 import com.oeasy.ordereasy.Fragments.BaseFragment;
+import com.oeasy.ordereasy.Fragments.BreadFragment;
 import com.oeasy.ordereasy.Fragments.DessertFragment;
 import com.oeasy.ordereasy.Fragments.DrinksFragment;
 import com.oeasy.ordereasy.Fragments.MainCourseFragment;
@@ -144,8 +145,10 @@ public class MenuActivity extends BaseActivity {
         adapter.addFragment(new RecommendedFragment(), "Recommended");
         adapter.addFragment(new StartersFragment(), "Starters");
         adapter.addFragment(new MainCourseFragment(), "Main Course");
+        adapter.addFragment(new BreadFragment(),"Breads");
         adapter.addFragment(new DessertFragment(), "Dessert");
         adapter.addFragment(new DrinksFragment(), "Drinks");
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

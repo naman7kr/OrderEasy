@@ -52,11 +52,7 @@ import me.relex.circleindicator.CircleIndicator;
  */
 
 public class HomeFragment extends Fragment implements NoInternetInterface, ViewPager.OnPageChangeListener {
-    private static final int RECOMMENDED_FLAG=0;
-    private static final int DESSERT_FLAG = 3;
-    private static final int STARTER_FLAG=1;
-    private static final int MAINCOURSE_FLAG=2;
-    private static final int DRINKS_FLAG=4;
+
     private static final int BANNER_TRANSITION_DELAY = 1200;
     private static final int BANNER_DELAY_TIME = 5 * 1000;
 
@@ -83,6 +79,7 @@ public class HomeFragment extends Fragment implements NoInternetInterface, ViewP
         setRecomended(view);
         setStarters(view);
         setMainCourse(view);
+        setBreads(view);
         setDesserts(view);
         setDrinks(view);
         loadData();
@@ -100,7 +97,7 @@ public class HomeFragment extends Fragment implements NoInternetInterface, ViewP
         homell.setVisibility(View.GONE);
         pBar.setVisibility(View.VISIBLE);
 
-        for(int i=0;i<5;i++){
+        for(int i=0;i<6;i++){
             typeLists.add(new ArrayList<FoodItem>());
         }
     }
@@ -191,54 +188,66 @@ public class HomeFragment extends Fragment implements NoInternetInterface, ViewP
     public void setRecomended(View view) {
 
         seeAll=view.findViewById(R.id.home_rec_seeall);
-        onSeeAllClick(seeAll,RECOMMENDED_FLAG);
+        onSeeAllClick(seeAll,Constants.RECOMMENDED);
 
         rView = view.findViewById(R.id.home_recommended);
         rView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        adapter = new HomeRecyclerAdapter(getContext(),RECOMMENDED_FLAG , getFoodItem(Constants.RECOMMENDED));
-        //adapterList.add(adapter);
+        adapter = new HomeRecyclerAdapter(getContext() , getFoodItem(Constants.RECOMMENDED));
+        adapterList.add(adapter);
         rView.setAdapter(adapter);
     }
     private void setStarters(View view) {
         seeAll=view.findViewById(R.id.home_starter_seeall);
-        onSeeAllClick(seeAll,STARTER_FLAG);
+        onSeeAllClick(seeAll,Constants.STARTERS);
 
         rView = view.findViewById(R.id.home_starters);
         rView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        adapter = new HomeRecyclerAdapter(getContext(), STARTER_FLAG, getFoodItem(Constants.STARTERS));
+        adapter = new HomeRecyclerAdapter(getContext(),  getFoodItem(Constants.STARTERS));
         adapterList.add(adapter);
         rView.setAdapter(adapter);
     }
 
     private void setMainCourse(View view) {
         seeAll=view.findViewById(R.id.home_maincourse_seeall);
-        onSeeAllClick(seeAll,MAINCOURSE_FLAG);
+        onSeeAllClick(seeAll,Constants.MAIN_COURSE);
 
         rView = view.findViewById(R.id.home_maincourse);
         rView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        adapter = new HomeRecyclerAdapter(getContext(), MAINCOURSE_FLAG, getFoodItem(Constants.MAIN_COURSE));
+        adapter = new HomeRecyclerAdapter(getContext(),getFoodItem(Constants.BREADS));
+        adapterList.add(adapter);
+
+        rView.setAdapter(adapter);
+    }
+
+    private void setBreads(View view) {
+        seeAll=view.findViewById(R.id.home_bread_seeall);
+        onSeeAllClick(seeAll,Constants.BREADS);
+
+        rView = view.findViewById(R.id.home_bread);
+        rView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        adapter = new HomeRecyclerAdapter(getContext(),getFoodItem(Constants.MAIN_COURSE));
         adapterList.add(adapter);
 
         rView.setAdapter(adapter);
     }
     private void setDesserts(View view) {
         seeAll=view.findViewById(R.id.home_desserts_seeall);
-        onSeeAllClick(seeAll,DESSERT_FLAG);
+        onSeeAllClick(seeAll,Constants.DESSERT);
 
         rView = view.findViewById(R.id.home_desserts);
         rView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        adapter = new HomeRecyclerAdapter(getContext(), DESSERT_FLAG, getFoodItem(Constants.DESSERT));
+        adapter = new HomeRecyclerAdapter(getContext(), getFoodItem(Constants.DESSERT));
         adapterList.add(adapter);
 
         rView.setAdapter(adapter);
     }
     public void setDrinks(View view) {
         seeAll=view.findViewById(R.id.home_drinks_seeall);
-        onSeeAllClick(seeAll,DRINKS_FLAG);
+        onSeeAllClick(seeAll,Constants.DRINKS);
 
         rView = view.findViewById(R.id.home_drinks);
         rView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        adapter = new HomeRecyclerAdapter(getContext(), DRINKS_FLAG, getFoodItem(Constants.DRINKS));
+        adapter = new HomeRecyclerAdapter(getContext(),  getFoodItem(Constants.DRINKS));
         adapterList.add(adapter);
 
         rView.setAdapter(adapter);

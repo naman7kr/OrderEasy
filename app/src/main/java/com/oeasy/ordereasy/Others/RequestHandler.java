@@ -7,6 +7,7 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.oeasy.ordereasy.Fragments.BreadFragment;
 import com.oeasy.ordereasy.Fragments.DessertFragment;
 import com.oeasy.ordereasy.Fragments.DrinksFragment;
 import com.oeasy.ordereasy.Fragments.HomeFragment;
@@ -30,6 +31,7 @@ public class RequestHandler extends OrderEasyApplication {
     public static DessertFragment f4;
     public static DrinksFragment f5;
     public static RecommendedFragment f6;
+    public static BreadFragment f7;
 
 
     private RequestHandler(Context context) {
@@ -48,6 +50,13 @@ public class RequestHandler extends OrderEasyApplication {
             mInstance = new RequestHandler(context);
         }
         f2= f;
+        return mInstance;
+    }
+    public static synchronized RequestHandler getInstance(Context context,BreadFragment f) {
+        if (mInstance == null) {
+            mInstance = new RequestHandler(context);
+        }
+        f7= f;
         return mInstance;
     }
     public static synchronized RequestHandler getInstance(Context context,MainCourseFragment f) {
@@ -124,6 +133,10 @@ public class RequestHandler extends OrderEasyApplication {
             }
             else if(f6!=null){
                 callback = f6;
+                callback.showRefreshLayout();
+            }
+            else if(f7!=null){
+                callback = f7;
                 callback.showRefreshLayout();
             }
             else {

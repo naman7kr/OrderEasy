@@ -26,52 +26,77 @@
       android:layout_marginLeft="10dp"
       android:layout_marginRight="10dp"
       android:id="@+id/dialog_aboutview"
-      >
-      <TextView
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="2"
-          android:text="Food Name"
-          android:textSize="25sp"
-          android:id="@+id/dialog_name"
-          />
-      <TextView
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight=".2"
-          android:text="RS."
-          android:gravity="end"
-          android:textSize="10sp"
-          />
-      <TextView
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:text="1000"
-          android:id="@+id/dialog_price"
-          android:textSize="25sp"
-          android:gravity="end"
-          />
+      android:orientation="vertical">
+     <TextView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:id="@+id/dialog_name"
+         android:text="Food Name"
+         android:textSize="40sp"
+         android:textStyle="bold"
+        android:textAlignment="center"/>
 
+      <ScrollView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@id/dialog_name"
+          android:layout_above="@+id/dialog_spinner_wrapper"
+          >
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:layout_marginTop="10dp"
+              android:layout_marginLeft="10dp"
+              android:layout_marginRight="10dp"
+              >
+              <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="Description"
+                  android:textStyle="bold"
+                  android:textSize="25sp"
+                  />
+              <TextView
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:textSize="15dp"
+                  android:textStyle="italic"
+                  android:text="This food is awesome. A Gantt Chart is a horizontal bar chart that provides a graphical illustration of the schedule  that helps to plan, coordinate, and track specific tasks in  a project. Gantt charts may have simple versions created on graph paper or more complex automated versions  created using project management applications such as Microsoft Project or Excel."
+                  android:id="@+id/dialog_description"
+                  />
+          </LinearLayout>
+      </ScrollView>
   </LinearLayout>
+
+
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_below="@+id/dialog_aboutview"
-      android:gravity="center"
+      android:gravity="center_vertical"
+      android:paddingLeft="10dp"
+      android:textAlignment="center"
+      android:layout_marginTop="15dp"
+      android:paddingTop="5dp"
+      android:paddingBottom="5dp"
+      android:orientation="horizontal"
+      android:layout_marginLeft="20dp"
       android:id="@+id/dialog_spinner_wrapper"
       >
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:id="@+id/dialog_qtyname"
+          android:textSize="15sp"
+          android:textStyle="bold"
           android:text="Plate(s)"
           />
       <android.support.v7.widget.CardView
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
+          android:layout_height="30dp"
           android:elevation="5dp"
-            android:layout_marginLeft="3dp"
+            android:layout_marginLeft="10dp"
           >
     <Spinner
         android:layout_width="wrap_content"
@@ -81,35 +106,27 @@
         />
       </android.support.v7.widget.CardView>
 
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="20dp"
+          android:text="Rs."
+          android:textSize="15sp"
+          android:textStyle="bold"
+          android:id="@+id/dialog_rs"
+          />
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:id="@+id/dialog_price"
+          android:layout_marginLeft="3dp"
+          android:text="1000"
+          android:textSize="15sp"
+          android:textStyle="bold"/>
+
   </LinearLayout>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/dialog_spinner_wrapper"
-        android:layout_above="@+id/dialog_addbtn"
-        >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            >
-       <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Description"
-        android:textSize="20sp"
-        />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="This food is awesome"
-                android:id="@+id/dialog_description"
-                />
-        </LinearLayout>
-    </ScrollView>
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

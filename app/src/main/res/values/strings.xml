@@ -8,11 +8,14 @@
         <item>Four</item>
     </string-array>
     <string name="about_us1">ABOUT US</string>
-    <string name="about_us2" >
+    <string name="about_us2">
 
 Ordering at restaurants can sometimes prove to be cumbersome especially when a restaurant is crowded. Our product "OrderEasy" automates the way we place orders at restaurants. Imagine a restaurant which provides you with your favourite cuisines without the need of a waiter coming to your table for orders. And you also get to review the food being serve there. All of this is possible with our app "OrderEasy" in your phones.
 Allow us to be more specific :
 The "OrderEasy" is a AI based mobile application which aims at helping people to find the best cuisines in a restaurant. Any visitor with the app can scan the QR code present at his/her respective table which will allocate a waiter for serving them. Selecting food from the menu and placing the order can be done by the application itself. The users can rate the food items and give their valuable feedbacks regarding the services provided by the restaurant. The ratings will be continuously stored in the database based on which our AI system will predict the likes and dislikes of the customer and recommend food accordingly.
 
 </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

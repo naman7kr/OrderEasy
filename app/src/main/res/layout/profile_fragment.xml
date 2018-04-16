@@ -120,6 +120,7 @@
                 android:layout_margin="5dp"
                 android:clickable="true"
                 android:text="Education: "
+                android:textColor="#000000"
                 android:textStyle="bold"
                 android:layout_marginLeft="25dp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -134,6 +135,7 @@
                 android:clickable="true"
                 android:text="Work: "
                 android:textStyle="bold"
+                android:textColor="#000000"
                 android:layout_marginLeft="8dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginTop="8dp"
@@ -146,6 +148,7 @@
                 android:layout_marginTop="5dp"
                 android:clickable="true"
                 android:text="DOB: "
+                android:textColor="#000000"
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/textView15"
                 android:layout_marginLeft="8dp"
@@ -158,6 +161,7 @@
                 android:layout_marginTop="4dp"
                 android:clickable="true"
                 android:text="Marriage:"
+                android:textColor="#000000"
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/textView11"
                 android:layout_marginLeft="8dp"
@@ -170,7 +174,7 @@
                 android:clickable="true"
                 android:text="Gender: "
                 android:textStyle="bold"
-
+                android:textColor="#000000"
                 android:layout_margin="5dp"
                 android:layout_marginLeft="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -187,6 +191,7 @@
                 android:clickable="true"
                 android:text="Blood Group: "
                 android:textStyle="bold"
+                android:textColor="#000000"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -197,6 +202,7 @@
                 android:layout_margin="5dp"
                 android:clickable="true"
                 android:text="O+"
+                android:textColor="#000000"
                 app:layout_constraintLeft_toRightOf="@+id/textView10"
                 android:layout_marginLeft="8dp"
                 app:layout_constraintTop_toTopOf="parent"
@@ -209,6 +215,7 @@
                 android:clickable="true"
                 android:text="22/02/1998"
                 android:layout_margin="5dp"
+                android:textColor="#000000"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/marriage"
@@ -221,6 +228,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="5dp"
                 android:clickable="true"
+                android:textColor="#000000"
                 android:text="UnMarried"
                 app:layout_constraintLeft_toRightOf="@+id/textView15"
                 app:layout_constraintTop_toBottomOf="@+id/gender" />
@@ -231,6 +239,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:text="Male"
+                android:textColor="#000000"
                 app:layout_constraintLeft_toRightOf="@+id/textView11"
                 android:layout_margin="5dp"
                 android:layout_marginLeft="5dp"
@@ -241,6 +250,7 @@
                 android:id="@+id/occupation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="#000000"
                 android:layout_margin="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="8dp"
@@ -258,6 +268,7 @@
                 android:layout_margin="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="8dp"
+                android:textColor="#000000"
                 app:layout_constraintTop_toBottomOf="@+id/occupation"
                 app:layout_constraintLeft_toRightOf="@+id/textView22" />
 
@@ -270,6 +281,7 @@
                 app:layout_constraintLeft_toRightOf="@+id/textView26"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
+                android:textColor="#000000"
                 app:layout_constraintTop_toBottomOf="@+id/email" />
 
             <TextView
@@ -281,6 +293,7 @@
                 app:layout_constraintLeft_toRightOf="@+id/textView27"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="0dp"
+                android:textColor="#000000"
                 app:layout_constraintTop_toBottomOf="@+id/dob" />
 
             <TextView
@@ -290,7 +303,7 @@
                 android:clickable="true"
                 android:text="Approved by: "
                 android:textStyle="bold"
-
+                android:textColor="#000000"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="5dp"
                 app:layout_constraintTop_toBottomOf="@+id/textView27"
@@ -304,6 +317,7 @@
                 android:text="Email: "
                 android:textStyle="bold"
                 android:layout_marginTop="5dp"
+                android:textColor="#000000"
                 app:layout_constraintTop_toBottomOf="@+id/textView16"
                 android:layout_marginLeft="8dp"
                 app:layout_constraintLeft_toLeftOf="parent" />
@@ -315,6 +329,7 @@
                 android:clickable="true"
                 android:text="Mobile: "
                 android:textStyle="bold"
+                android:textColor="#000000"
                 android:layout_margin="5dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="5dp"
@@ -328,6 +343,7 @@
                 android:layout_margin="5dp"
                 android:clickable="true"
                 android:text="B.Tech"
+                android:textColor="#000000"
                 android:layout_marginTop="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/textView10"
                 app:layout_constraintLeft_toRightOf="@+id/textView5"
@@ -337,7 +353,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/log_out"
                 android:layout_marginTop="10dp"
-                android:background="#ff4c4c"
+                android:background="#ff0000"
                 android:textColor="#ffffff"
                 android:text="LOGOUT"
                 android:textStyle="bold"

@@ -12,11 +12,13 @@ public class Constants {
     public static final String IMG_SLIDER_ROOT=IMG_ROOT+"slider/";
     public static final int VEG=1;
     public static final int NON_VEG=0;
-    public static final int RECOMMENDED=4;
-    public static final int STARTERS=0;
-    public static final int MAIN_COURSE=1;
-    public static final int DESSERT=2;
-    public static final int DRINKS=3;
+    public static final int RECOMMENDED=0;
+    public static final int STARTERS=1;
+    public static final int MAIN_COURSE=2;
+    public static final int BREADS=3;
+    public static final int DESSERT=4;
+    public static final int DRINKS=5;
+
     public static final int RECT_PLACEHOLDER = 0;
     public static final int SQUA_PLACEHOLDER = 1;
     public static final int QTY_PIECES=0;

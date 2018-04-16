@@ -38,7 +38,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
     DatabaseHelper db;
     int alreadyPresent;
 
-    public HomeRecyclerAdapter(Context context, int type, ArrayList<FoodItem> items) {
+    public HomeRecyclerAdapter(Context context, ArrayList<FoodItem> items) {
         this.items=items;
         this.context=context;
         this.type=type;
