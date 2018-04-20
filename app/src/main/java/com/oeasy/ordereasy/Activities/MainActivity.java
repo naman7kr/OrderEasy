@@ -2,21 +2,17 @@ package com.oeasy.ordereasy.Activities;
 
 
 import android.content.Intent;
-
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.oeasy.ordereasy.Adapters.MainBtmAdapter;
 import com.oeasy.ordereasy.Others.DatabaseHelper;
-import com.oeasy.ordereasy.Others.Utilities;
 import com.oeasy.ordereasy.R;
 
 
@@ -31,7 +27,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
 //        DatabaseHelper db=new DatabaseHelper(this);
-
+//        db.onUpgrade(db.getWritableDatabase(),1,1);
 
         initialize();
 
@@ -98,6 +94,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setBottomNavigation() {
+
         adapter=new MainBtmAdapter(getSupportFragmentManager());
         mPager.setAdapter(adapter);
         mBtmNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

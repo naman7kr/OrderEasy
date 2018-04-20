@@ -66,8 +66,6 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                         if(alreadyPresent==0)
                             db.createFoodItems(item);
                         else{
-
-
                         }
                         ArrayList<FoodItem> dbResponse=db.getAllFoodItems();
                         for (int i = 0;i<dbResponse.size();i++){

@@ -15,6 +15,7 @@ import com.oeasy.ordereasy.Fragments.AboutUsFragment;
 public class MainBtmAdapter extends FragmentPagerAdapter {
     public MainBtmAdapter(FragmentManager fm) {
         super(fm);
+
     }
 
     @Override

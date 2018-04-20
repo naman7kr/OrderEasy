@@ -30,6 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Table Names
     private static final String TABLE_FOOD_ITEMS = "fooditem";
     private static final String TABLE_WAITER="waiter";
+    private static final String TABLE_BILL="bill";
 
     // Common column names
     private static final String KEY_FOOD_ID="food_id";
@@ -54,6 +55,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_DESCRIPTION+" varchar(255), " +KEY_PRICE+" float, "
             +KEY_QUANTITY_TYPE +" int, "+ KEY_IMAGE+" varchar(100), "
             +KEY_QTY+" varchar(50), "+KEY_FOOD_ID + " INTEGER, "+KEY_RATING+" FLOAT(1,1))";
+    private static final String CREATE_TABLE_BILL = "CREATE TABLE "
+            + TABLE_BILL + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            +KEY_NAME+" varchar(100), "+ KEY_CATEGORY +" INTEGER, "
+            + KEY_DESCRIPTION+" varchar(255), " +KEY_PRICE+" float, "
+            +KEY_QUANTITY_TYPE +" int, "+ KEY_IMAGE+" varchar(100), "
+            +KEY_QTY+" varchar(50), "+KEY_FOOD_ID + " INTEGER, "+KEY_RATING+" FLOAT(1,1))";
     private static final String CREATE_TABLE_WAITER = "CREATE TABLE " + TABLE_WAITER
             +"("+KEY_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, "
             +KEY_NAME + " varchar(100), "+ KEY_CONTACT_NO+" varchar(13), "
@@ -68,7 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // creating required tables
         db.execSQL(CREATE_TABLE_FOOD_ITEMS);
         db.execSQL(CREATE_TABLE_WAITER);
-
+        db.execSQL(CREATE_TABLE_BILL);
     }
 
 
@@ -95,6 +102,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_RATING,fItem.getRating());
         // insert row
         db.insert(TABLE_FOOD_ITEMS, null, values);
+        db.close();
+    }
+    public void createBill(ArrayList<FoodItem> fList) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        for(int i=0;i<fList.size();i++){
+            FoodItem fItem=fList.get(i);
+            values.put(KEY_NAME, fItem.getName());
+            values.put(KEY_CATEGORY, fItem.getCategory());
+            values.put(KEY_DESCRIPTION, fItem.getDesc());
+            values.put(KEY_IMAGE,fItem.getImg());
+            values.put(KEY_QUANTITY_TYPE,fItem.getQtyType());
+            values.put(KEY_QTY,fItem.getQty());
+            values.put(KEY_PRICE,fItem.getPrice());
+            values.put(KEY_FOOD_ID,fItem.getFid());
+            values.put(KEY_RATING,fItem.getRating());
+            // insert row
+            db.insert(TABLE_BILL, null, values);
+        }
+
         db.close();
     }
     public void addWaiter(WaiterModel waiter) {
@@ -197,4 +224,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM "+TABLE_WAITER);
         db.close();
     }
+
 }
