@@ -84,6 +84,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // on upgrade drop older tables
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FOOD_ITEMS);
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_WAITER);
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_BILL);
         // create new tables
         onCreate(db);
     }
@@ -121,7 +122,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // insert row
             db.insert(TABLE_BILL, null, values);
         }
-
         db.close();
     }
     public void addWaiter(WaiterModel waiter) {
@@ -137,6 +137,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
     public int countFoodItem(FoodItem fItem){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String countQuery="SELECT * FROM "+TABLE_FOOD_ITEMS+" WHERE "+KEY_ID+"='"+fItem.getId()+"'";
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
+    public int countBillItems(FoodItem fItem){
         SQLiteDatabase db = this.getWritableDatabase();
         String countQuery="SELECT * FROM "+TABLE_FOOD_ITEMS+" WHERE "+KEY_ID+"='"+fItem.getId()+"'";
         Cursor cursor = db.rawQuery(countQuery, null);
@@ -160,6 +168,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<FoodItem> getAllFoodItems() {
         ArrayList<FoodItem> items = new ArrayList<FoodItem>();
         String selectQuery = "SELECT  * FROM " + TABLE_FOOD_ITEMS;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                FoodItem item = new FoodItem();
+                item.setName(c.getString(c.getColumnIndex(KEY_NAME)));
+                item.setDesc((c.getString(c.getColumnIndex(KEY_DESCRIPTION))));
+                item.setQtyType(c.getInt(c.getColumnIndex(KEY_QUANTITY_TYPE)));
+                item.setQty(c.getString(c.getColumnIndex(KEY_QTY)));
+                item.setCategory(c.getInt(c.getColumnIndex(KEY_CATEGORY)));
+                item.setImg(c.getString(c.getColumnIndex(KEY_IMAGE)));
+                item.setFid(c.getInt(c.getColumnIndex(KEY_FOOD_ID)));
+                item.setRating(c.getFloat(c.getColumnIndex(KEY_RATING)));
+                item.setPrice(c.getFloat(c.getColumnIndex(KEY_PRICE)));
+
+                // adding to todo list
+                items.add(item);
+            } while (c.moveToNext());
+        }
+        db.close();
+        return items;
+    }
+    public ArrayList<FoodItem> getBill() {
+        ArrayList<FoodItem> items = new ArrayList<FoodItem>();
+        String selectQuery = "SELECT  * FROM " + TABLE_BILL;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
@@ -209,6 +245,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return waiters;
     }
+
     public void deleteFoodItem(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM "+TABLE_FOOD_ITEMS+" WHERE "+KEY_FOOD_ID+"='"+id+"'");
@@ -217,6 +254,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteAllFoodItems(){
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM "+TABLE_FOOD_ITEMS);
+        db.close();
+    }
+    public void deleteAllBill(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM "+TABLE_BILL);
         db.close();
     }
     public void deleteAllWaiters(){
