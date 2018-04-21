@@ -96,7 +96,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
         Spinner sp=fDialog.findViewById(R.id.dialog_sp_qty);
         if (item.getImg() != null)
             Utilities.setPicassoImage(context, Constants.IMG_ROOT+item.getImg(), fImg, Constants.SQUA_PLACEHOLDER);
-        setSpinner(sp);
+        setSpinner(sp,item);
         sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -117,8 +117,20 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
         fName.setText(item.getName());
 
     }
-    private void setSpinner(Spinner sp) {
-        ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(context,R.array.qty_pieces,android.R.layout.simple_spinner_item);
+    private void setSpinner(Spinner sp, FoodItem item) {
+        ArrayAdapter<CharSequence> adapter=null;
+        if(item.getQtyType()==0)
+            adapter=ArrayAdapter.createFromResource(context,R.array.Qty_for_desserts_and_drinks,android.R.layout.simple_spinner_item);
+
+        else if(item.getQtyType()==1)
+        {
+            adapter=ArrayAdapter.createFromResource(context,R.array.Qty_for_maincourse_and_starters,android.R.layout.simple_spinner_item);
+        }
+
+        else
+        {
+            adapter=ArrayAdapter.createFromResource(context,R.array.Qty_for_bread,android.R.layout.simple_spinner_item);
+        }
         adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         sp.setAdapter(adapter);
     }

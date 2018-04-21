@@ -1,12 +1,34 @@
 <resources>
     <string name="app_name">OrderEasy</string>
-    <string-array name="qty_pieces">
-        <item>Half</item>
-        <item>Full</item>
-        <item>Two</item>
-        <item>Three</item>
-        <item>Four</item>
+    <string-array name="Qty_for_desserts_and_drinks">
+        <item>Qty 1</item>
+        <item>Qty 2</item>
+        <item>Qty 3</item>
+        <item>Qty 4</item>
+        <item>Qty 5</item>
     </string-array>
+
+    <string-array name="Qty_for_maincourse_and_starters">
+        <item>Qty 1/2</item>
+        <item>Qty 1</item>
+        <item>Qty 2</item>
+        <item>Qty 3</item>
+        <item>Qty 4</item>
+    </string-array>
+
+    <string-array name="Qty_for_bread">
+        <item>Qty 1</item>
+        <item>Qty 2</item>
+        <item>Qty 3</item>
+        <item>Qty 4</item>
+        <item>Qty 5</item>
+        <item>Qty 6</item>
+        <item>Qty 7</item>
+        <item>Qty 8</item>
+        <item>Qty 9</item>
+        <item>Qty 10</item>
+    </string-array>
+
     <string name="about_us1">ABOUT US</string>
     <string name="about_us2">
 

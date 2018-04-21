@@ -39,7 +39,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     GoogleSignInClient mGoogleSignInClient;
     SignInButton google_sign_in_button;
     int RC_SIGN_IN;
-    GoogleSignInAccount account;
+     GoogleSignInAccount account;
     TextView text;
     String personEmail;
     @Override

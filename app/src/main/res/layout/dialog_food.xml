@@ -80,7 +80,7 @@
               android:paddingTop="5dp"
               android:paddingBottom="5dp"
               android:orientation="horizontal"
-              android:layout_marginLeft="20dp"
+              android:layout_marginLeft="10dp"
               android:id="@+id/dialog_spinner_wrapper"
               android:layout_marginBottom="50dp"
               >
@@ -90,7 +90,7 @@
                   android:id="@+id/dialog_qtyname"
                   android:textSize="15sp"
                   android:textStyle="bold"
-                  android:text="Plate(s)"
+                  android:text="Choose - "
                   />
               <android.support.v7.widget.CardView
                   android:layout_width="wrap_content"
