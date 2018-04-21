@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.oeasy.ordereasy.Modals.FoodItem;
@@ -18,9 +19,11 @@ import java.util.ArrayList;
 public class CartPlaceOrderAdapter extends RecyclerView.Adapter<CartPlaceOrderAdapter.MyViewHolder> {
     private ArrayList<FoodItem> items;
     private Context context;
-    public CartPlaceOrderAdapter(Context context, ArrayList<FoodItem> items){
+    private static int tag;
+    public CartPlaceOrderAdapter(Context context, ArrayList<FoodItem> items,int TAG){
         this.items=items;
         this.context=context;
+        tag=TAG;
     }
     @Override
     public CartPlaceOrderAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -35,6 +38,11 @@ public class CartPlaceOrderAdapter extends RecyclerView.Adapter<CartPlaceOrderAd
         holder.fName.setText(current.getName());
         holder.fQty.setText(current.getQty());
         holder.fCost.setText(String.valueOf(current.getPrice()));
+        if(tag==0){
+        holder.fTag.setVisibility(View.VISIBLE);
+        }else{
+            holder.fTag.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -45,11 +53,13 @@ public class CartPlaceOrderAdapter extends RecyclerView.Adapter<CartPlaceOrderAd
         TextView fName;
         TextView fQty;
         TextView fCost;
+        ImageView fTag;
         public MyViewHolder(View itemView) {
             super(itemView);
             fName=itemView.findViewById(R.id.place_order_item_name);
             fQty=itemView.findViewById(R.id.place_order_item_quantity);
             fCost=itemView.findViewById(R.id.place_order_item_cost);
+            fTag=itemView.findViewById(R.id.place_order_item_tag);
         }
     }
 }

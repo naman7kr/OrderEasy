@@ -144,9 +144,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return count;
     }
-    public int countBillItems(FoodItem fItem){
+    public int countBillItems(){
         SQLiteDatabase db = this.getWritableDatabase();
-        String countQuery="SELECT * FROM "+TABLE_FOOD_ITEMS+" WHERE "+KEY_ID+"='"+fItem.getId()+"'";
+        String countQuery="SELECT * FROM "+TABLE_FOOD_ITEMS;
         Cursor cursor = db.rawQuery(countQuery, null);
         int count = cursor.getCount();
         cursor.close();
@@ -193,7 +193,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return items;
     }
-    public ArrayList<FoodItem> getBill() {
+    public ArrayList<FoodItem> getBillItems() {
         ArrayList<FoodItem> items = new ArrayList<FoodItem>();
         String selectQuery = "SELECT  * FROM " + TABLE_BILL;
 

@@ -25,13 +25,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.oeasy.ordereasy.Activities.MainActivity;
 import com.oeasy.ordereasy.Activities.MenuActivity;
 import com.oeasy.ordereasy.Adapters.HomeRecyclerAdapter;
 import com.oeasy.ordereasy.Adapters.HomeSliderAdapter;
+import com.oeasy.ordereasy.Interfaces.NoInternetInterface;
 import com.oeasy.ordereasy.Modals.FoodItem;
 import com.oeasy.ordereasy.Others.Constants;
-import com.oeasy.ordereasy.Interfaces.NoInternetInterface;
 import com.oeasy.ordereasy.Others.CustomScroller;
 import com.oeasy.ordereasy.Others.RequestHandler;
 import com.oeasy.ordereasy.R;
@@ -109,6 +108,7 @@ public class HomeFragment extends Fragment implements NoInternetInterface, ViewP
                 homell.setVisibility(View.VISIBLE);
                 pBar.setVisibility(View.GONE);
                 try {
+                    Log.e("LOLLL",response);
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray fType = jsonObject.getJSONArray("food_items");
 
@@ -157,7 +157,6 @@ public class HomeFragment extends Fragment implements NoInternetInterface, ViewP
 
         RequestHandler.getInstance(getContext(),this).addToRequestQueue(request);
     }
-
 
     private void setSlider() {
         String img[]={"ic_slider1.jpg","ic_slider2.jpg","ic_slider3.jpg"};

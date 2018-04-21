@@ -1,19 +1,12 @@
 package com.oeasy.ordereasy.Activities;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.hardware.camera2.CameraAccessException;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -24,22 +17,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.zxing.Result;
-import com.oeasy.ordereasy.Adapters.HomeRecyclerAdapter;
-import com.oeasy.ordereasy.Adapters.HomeSliderAdapter;
-import com.oeasy.ordereasy.Fragments.HomeFragment;
-import com.oeasy.ordereasy.Modals.FoodItem;
 import com.oeasy.ordereasy.Modals.WaiterModel;
 import com.oeasy.ordereasy.Others.Constants;
-import com.oeasy.ordereasy.Others.CustomScroller;
 import com.oeasy.ordereasy.Others.DatabaseHelper;
 import com.oeasy.ordereasy.Others.RequestHandler;
 import com.oeasy.ordereasy.R;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -144,14 +130,14 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
             public void onResponse(String response) {
 
                 try {
-
+                        Log.e("LOLA",response);
                         JSONObject waiters = new JSONObject(response);
 
 
                             WaiterModel waiter=new WaiterModel();
                             waiter.setName(waiters.getString("name"));
                             waiter.setTable_no(tableNo);
-                            waiter.setContact_no(waiters.getString("contact_no"));
+                    waiter.setContact_no(waiters.getString("contact"));
                             waiter.setWaiter_id(waiters.getInt("id"));
                             db.addWaiter(waiter);
                             Log.e("Waiter",waiter.getName());

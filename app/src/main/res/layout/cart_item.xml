@@ -37,6 +37,12 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="10dp"
+                            android:src="@drawable/ic_launcher_background"
+                            android:id="@+id/cart_item_tag"
+                            />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -44,6 +50,7 @@
                     android:text="Paneer Do Pyaza"
                     android:textSize="20sp"
                     android:id="@+id/cart_item_name"
+                    android:layout_marginLeft="10dp"
                     />
                         <TextView
                             android:layout_width="wrap_content"

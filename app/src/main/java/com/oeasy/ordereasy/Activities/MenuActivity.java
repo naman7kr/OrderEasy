@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.oeasy.ordereasy.Adapters.MenuTabsAdapter;
-import com.oeasy.ordereasy.Fragments.BaseFragment;
 import com.oeasy.ordereasy.Fragments.BreadFragment;
 import com.oeasy.ordereasy.Fragments.DessertFragment;
 import com.oeasy.ordereasy.Fragments.DrinksFragment;
@@ -40,6 +39,8 @@ public class MenuActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+
         initialize();
         setToolbar();
         setTabs();

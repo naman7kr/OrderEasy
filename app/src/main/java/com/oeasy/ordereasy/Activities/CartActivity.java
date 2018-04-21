@@ -22,8 +22,8 @@ public class CartActivity extends BaseActivity {
     private CartTabsAdapter adapter;
 
 
-    private ViewPager mPager;
-    private TabLayout mTab;
+    public ViewPager mPager;
+    public TabLayout mTab;
 
 
     @Override
@@ -38,8 +38,6 @@ public class CartActivity extends BaseActivity {
         mTab=findViewById(R.id.cart_tabs);
         mPager=findViewById(R.id.cart_vp);
         adapter=new CartTabsAdapter(this,getSupportFragmentManager());
-
-
     }
     private void setTabs() {
         addTabs();

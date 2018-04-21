@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.oeasy.ordereasy.Activities.CartActivity;
 import com.oeasy.ordereasy.Activities.MainActivity;
 import com.oeasy.ordereasy.Adapters.HorizontalRecyclerViewAdapter;
 import com.oeasy.ordereasy.Adapters.VerticalRecyclerViewAdapter;
@@ -53,6 +55,7 @@ public class PreviewFragment extends Fragment {
     private ArrayList<FoodItem> itemsList;
     private DatabaseHelper db;
     private Button subBtn;
+    private static int TAG = 0;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,7 +69,30 @@ public class PreviewFragment extends Fragment {
         getCartItems();
         getWaiters();
         setRatingToDatabase();
+      //  updateItemOnPageChange();
         return view;
+    }
+
+    private void updateItemOnPageChange() {
+        CartActivity activity= (CartActivity) getActivity();
+        activity.mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+            @Override
+            public void onPageSelected(int position) {
+                if(position==0){
+                    Log.e("LOL", String.valueOf(position));
+                    verticalAdapter.notifyDataSetChanged();
+                    horizontalAdapter.notifyDataSetChanged();
+                }
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private void initialize(View view) {
@@ -75,7 +101,6 @@ public class PreviewFragment extends Fragment {
         waitersList=new ArrayList<>();
         itemsList=new ArrayList<>();
         db = new DatabaseHelper(getContext());
-
         subBtn=view.findViewById(R.id.cart_submit_rating_btn);
     }
     private void setRatingToDatabase() {
@@ -95,9 +120,10 @@ public class PreviewFragment extends Fragment {
                     jObject.put("email",account.getEmail());
                     jArray.put(jObject);
                     }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
+                    catch (JSONException e) {
+                        e.printStackTrace();
+                }
                 Log.e("LOL",jArray.toString());
                 sendData(jArray);
                 Intent intent=new Intent(getContext(), MainActivity.class);
@@ -107,7 +133,6 @@ public class PreviewFragment extends Fragment {
             }
         });
     }
-
     private void sendData(final JSONArray jsonArray) {
         StringRequest request=new StringRequest(Request.Method.POST, Constants.URL_PROCESS_REQUEST, new Response.Listener<String>() {
             @Override
@@ -139,7 +164,7 @@ public class PreviewFragment extends Fragment {
     }
 
     private void setCartLayout() {
-        verticalAdapter = new VerticalRecyclerViewAdapter(getContext(),getItemsList());
+        verticalAdapter = new VerticalRecyclerViewAdapter(getContext(),getItemsList(),TAG);
         verticalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mVerticalRecyclerView.setLayoutManager(verticalLayoutManager);
         mVerticalRecyclerView.setAdapter(verticalAdapter);
@@ -153,13 +178,20 @@ public class PreviewFragment extends Fragment {
         return itemsList;
     }
     public void getCartItems() {
-        ArrayList<FoodItem> list=db.getAllFoodItems();
-        for(int i =0 ;i<list.size();i++){
-            itemsList.add(list.get(i));
-            verticalAdapter.notifyDataSetChanged();
-        }
-        verticalAdapter.notifyDataSetChanged();
-
+            ArrayList<FoodItem> cList=db.getAllFoodItems();
+            for(int i=0;i<cList.size();i++){
+                itemsList.add(cList.get(i));
+                TAG=0;
+                verticalAdapter.notifyDataSetChanged();
+                Log.e("preview cart",cList.get(i).getName());
+            }
+            ArrayList<FoodItem> bList=db.getBillItems();
+            for(int i=0;i<bList.size();i++){
+                itemsList.add(bList.get(i));
+                TAG=1;
+                verticalAdapter.notifyDataSetChanged();
+                Log.e("preview bill",bList.get(i).getName());
+            }
     }
 
     public void getWaiters() {
@@ -169,6 +201,5 @@ public class PreviewFragment extends Fragment {
             horizontalAdapter.notifyDataSetChanged();
         }
         horizontalAdapter.notifyDataSetChanged();
-
     }
 }

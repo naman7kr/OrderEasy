@@ -28,11 +28,13 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
     private ArrayList<FoodItem> foodItemArrayList;
     private Context context;
     private DatabaseHelper db;
+    private int tag;
 
-    public VerticalRecyclerViewAdapter(Context context,ArrayList<FoodItem> foodItems) {
+    public VerticalRecyclerViewAdapter(Context context,ArrayList<FoodItem> foodItems,int tag) {
         this.foodItemArrayList=foodItems;
         this.context=context;
         db=new DatabaseHelper(context);
+        this.tag=tag;
     }
 
     @Override
@@ -49,10 +51,17 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
     @Override
     public void onBindViewHolder(final MessageViewHolder holder, final int position) {
         final FoodItem fdItem=foodItemArrayList.get(position);
-        VerticalRecyclerViewAdapter.MessageViewHolder messageViewHolder =holder;
+        final VerticalRecyclerViewAdapter.MessageViewHolder messageViewHolder =holder;
         messageViewHolder.fName.setText(fdItem.getName());
         messageViewHolder.fDescription.setText(fdItem.getDesc());
-        messageViewHolder.rBar.setRating(fdItem.getRating());
+
+        if(tag==0){
+            messageViewHolder.fTag.setVisibility(View.VISIBLE);
+            messageViewHolder.remBtn.setVisibility(View.VISIBLE);
+        }else{
+            messageViewHolder.fTag.setVisibility(View.GONE);
+            messageViewHolder.remBtn.setVisibility(View.GONE);
+        }
         messageViewHolder.remBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,21 +74,21 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
         if (fdItem.getImg() != null)
             Utilities.setPicassoImage(context, Constants.IMG_ROOT+fdItem.getImg(), holder.fImage, Constants.SQUA_PLACEHOLDER);
         messageViewHolder.fPrice.setText(String.valueOf(fdItem.getPrice()));
+        messageViewHolder.rBar.setRating(fdItem.getRating());
         messageViewHolder.rBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 holder.rBar.setIsIndicator(false);
                 db.setRating(fdItem.getFid(),rating);
-
+            //    messageViewHolder.rBar.setRating(fdItem.getRating());
             }
         });
-    }
 
+    }
     @Override
     public int getItemCount() {
         return foodItemArrayList.size();
     }
-
     public class MessageViewHolder extends RecyclerView.ViewHolder {
         TextView fName;
         TextView fDescription;
@@ -88,11 +97,11 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
         Spinner qtySp;
         RatingBar rBar;
         TextView remBtn;
+        ImageView fTag;
         public MessageViewHolder(View itemView) {
             super(itemView);
             initialize(itemView);
         }
-
         private void initialize(View itemView) {
             fName=itemView.findViewById(R.id.cart_item_name);
             fDescription=itemView.findViewById(R.id.cart_item_description);
@@ -102,6 +111,7 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
             rBar=itemView.findViewById(R.id.cart_rating_bar);
             remBtn=itemView.findViewById(R.id.cart_item_remove_btn);
             remBtn.setTextColor(Color.RED);
+            fTag=itemView.findViewById(R.id.cart_item_tag);
         }
     }
 }

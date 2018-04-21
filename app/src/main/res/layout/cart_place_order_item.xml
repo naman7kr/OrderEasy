@@ -4,6 +4,12 @@
     android:layout_marginTop="10dp"
     android:layout_marginBottom="10dp"
     >
+    <ImageView
+        android:layout_width="15dp"
+        android:layout_height="10dp"
+        android:src="@drawable/ic_launcher_background"
+        android:id="@+id/place_order_item_tag"
+        />
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -12,6 +18,7 @@
         android:id="@+id/place_order_item_name"
         android:textSize="18sp"
         />
+
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
