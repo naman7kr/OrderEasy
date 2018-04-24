@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.oeasy.ordereasy.Adapters.CartTabsAdapter;
@@ -63,5 +65,21 @@ public class CartActivity extends BaseActivity {
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         });
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.cart_toolbar,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.cart_menu:
+                startActivity(new Intent(this,MenuActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -6,12 +6,14 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.oeasy.ordereasy.Adapters.MenuTabsAdapter;
 import com.oeasy.ordereasy.Fragments.BreadFragment;
@@ -31,78 +33,58 @@ public class MenuActivity extends BaseActivity {
     private ViewPager mPager;
     public TabLayout mTab;
     private MenuTabsAdapter adapter;
-    public Toolbar btmToolbar;
+    public LinearLayout btmToolbar;
+    private LinearLayout btmFilterBtn;
     private int flag=1;
-
+    TextView filterCategory;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
-
         initialize();
         setToolbar();
         setTabs();
         getSeeAllRequest();
-        setBottomSearchBar();
+        setBottomFilter();
 
     }
 
-    private void setBottomSearchBar() {
-        btmToolbar.inflateMenu(R.menu.menu_search);
-        btmToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+    private void setBottomFilter() {
+        btmFilterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onMenuItemClick(final MenuItem item) {
-                if(item.getItemId()==R.id.menu_item_search) {
-                    flag=1;
-                    final int current = mPager.getCurrentItem();
-                    final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
-
-                    searchItem(item,current,searchView);
-
-                        final ViewPager.OnPageChangeListener listener = new ViewPager.OnPageChangeListener() {
-                            @Override
-                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                            }
-
-                            @Override
-                            public void onPageSelected(int position) {
-
-                                if (current != position) {
-                                    flag = 0;
-                                    Log.e("LPL", String.valueOf(position));
-                                    item.collapseActionView();
-                                }
-                                else{
-                                    flag=1;
-
-                                }
-                            }
-
-                            @Override
-                            public void onPageScrollStateChanged(int state) {
-
-                            }
-                        };
-
-                        mPager.addOnPageChangeListener(listener);
-                    if(flag==0){
-                        Log.e("LPL","LOL");
-                        mPager.removeOnPageChangeListener(listener);
+            public void onClick(View v) {
+                PopupMenu pum = new PopupMenu(MenuActivity.this,v);
+                pum.inflate(R.menu.filter_options);
+                pum.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.pop_up_veg:
+                                filterItems(item.getTitle().toString());
+                                filterCategory.setText(item.getTitle());
+                                return true;
+                            case R.id.pop_up_nonveg:
+                                filterItems(item.getTitle().toString());
+                                filterCategory.setText(item.getTitle());
+                                return true;
+                            case R.id.pop_up_all:
+                                filterItems(item.getTitle().toString());
+                                filterCategory.setText(item.getTitle());
+                                return true;
+                        }
+                        return false;
                     }
-
-                }
-                return true;
-            }
-
-            private void searchItem(MenuItem item, int current, SearchView searchView) {
-
-                MenuBtmSearchInterface i = (MenuBtmSearchInterface) adapter.getItem(current);
-                i.setToolbarIcon(item,searchView);
+                });
+                pum.show();
             }
         });
+    }
+
+    private void filterItems(String title) {
+        int current=mPager.getCurrentItem();
+        MenuBtmSearchInterface i = (MenuBtmSearchInterface) adapter.getItem(current);
+        i.filterItems(title);
     }
 
 
@@ -132,8 +114,8 @@ public class MenuActivity extends BaseActivity {
         mTab=findViewById(R.id.menu_tabs);
         mPager=findViewById(R.id.menu_vp);
         btmToolbar=findViewById(R.id.btm_toolbar);
-
-
+        btmFilterBtn=findViewById(R.id.btm_toolbar_filter_btn);
+        filterCategory=findViewById(R.id.menu_filter_type);
     }
     private void setTabs() {
         adapter=new MenuTabsAdapter(this,getSupportFragmentManager());
@@ -153,21 +135,61 @@ public class MenuActivity extends BaseActivity {
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.home_toolbar,menu);
+        getMenuInflater().inflate(R.menu.menu_toolbar,menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()){
-            case R.id.home_cart:
+            case R.id.menu_cart:
                 startActivity(new Intent(this,CartActivity.class));
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+            case R.id.menu_item_search:
+                flag=1;
+                final int current = mPager.getCurrentItem();
+                final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
 
+                searchItem(item,current,searchView);
+
+                final ViewPager.OnPageChangeListener listener = new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    }
+                    @Override
+                    public void onPageSelected(int position) {
+
+                        if (current!= position) {
+                            flag = 0;
+                            Log.e("LPL", String.valueOf(position));
+                            item.collapseActionView();
+                        }
+                        else{
+                            flag=1;
+                        }
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+
+                    }
+                };
+
+                mPager.addOnPageChangeListener(listener);
+                if(flag==0){
+                    Log.e("LPL","LOL");
+                    mPager.removeOnPageChangeListener(listener);
+                }
+
+             }
+            return true;
+        }
+private void searchItem(MenuItem item, int current, SearchView searchView) {
+
+        MenuBtmSearchInterface i = (MenuBtmSearchInterface) adapter.getItem(current);
+        i.setToolbarIcon(item,searchView);
+        }
 
     public void getSeeAllRequest() {
         int sTab = getIntent().getIntExtra("START_TAB", 0);

@@ -1,8 +1,6 @@
 package com.oeasy.ordereasy.Fragments;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -23,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.oeasy.ordereasy.Activities.CartActivity;
+import com.oeasy.ordereasy.Activities.MainActivity;
 import com.oeasy.ordereasy.Adapters.CartPlaceOrderAdapter;
 import com.oeasy.ordereasy.Modals.FoodItem;
 import com.oeasy.ordereasy.Others.Constants;
@@ -47,6 +47,7 @@ public class PlaceOrderFragment extends Fragment {
     private ArrayList<FoodItem> list;
     private DatabaseHelper db;
     CartPlaceOrderAdapter adapter;
+    private TextView total;
     private Button poBtn;
     private static int TAG = 0;
     @Nullable
@@ -63,6 +64,7 @@ public class PlaceOrderFragment extends Fragment {
         updateItemOnPageChange();
         return view;
     }
+
     private void updateItemOnPageChange() {
         CartActivity activity= (CartActivity) getActivity();
         activity.mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -73,23 +75,29 @@ public class PlaceOrderFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 if(position==1){
-                    Log.e("LOL", String.valueOf(position));
+                    if(db.countWaiter()==0){
+                        poBtn.setEnabled(false);
+                        poBtn.setText("First Scan QR");
+                    }else{
+                        poBtn.setEnabled(true);
+                        poBtn.setText("Place Order");
+                    }
                     list.clear();
                     ArrayList<FoodItem> bList=db.getBillItems();
 
                     for(int i=0;i<bList.size();i++){
+                        bList.get(i).setTag(1);
                         list.add(bList.get(i));
-                        TAG=1;
                         adapter.notifyDataSetChanged();
                     }
                     ArrayList<FoodItem> cList=db.getAllFoodItems();
                     for(int i=0;i<cList.size();i++){
+                        cList.get(i).setTag(0);
                         list.add(cList.get(i));
-                        TAG=0;
                         adapter.notifyDataSetChanged();
                     }
                     adapter.notifyDataSetChanged();
-                    Log.e("LOL",list.toString());
+                    setTotal();
                 }
             }
             @Override
@@ -103,32 +111,29 @@ public class PlaceOrderFragment extends Fragment {
         db= new DatabaseHelper(getContext());
         list=new ArrayList<>();
         poBtn=view.findViewById(R.id.place_order_btn);
+        total=view.findViewById(R.id.place_order_total);
     }
 
     private void setCartDetails() {
         rView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new CartPlaceOrderAdapter(getContext(), getList(),TAG);
+        adapter = new CartPlaceOrderAdapter(getContext(), setData());
         rView.setAdapter(adapter);
     }
-
-    public ArrayList<FoodItem> getList() {
-        return list;
-    }
-
-    private void setData() {
+    private ArrayList<FoodItem> setData() {
         ArrayList<FoodItem> bList=db.getBillItems();
         for(int i=0;i<bList.size();i++){
+            bList.get(i).setTag(1);
             list.add(bList.get(i));
-            TAG=1;
-            adapter.notifyDataSetChanged();
+
+
         }
         ArrayList<FoodItem> cList=db.getAllFoodItems();
         for(int i=0;i<cList.size();i++){
+            cList.get(i).setTag(0);
             list.add(cList.get(i));
-            TAG=0;
-            adapter.notifyDataSetChanged();
+
         }
-        adapter.notifyDataSetChanged();
+        return list;
     }
     private void onPlaceOrderClick() {
         poBtn.setOnClickListener(new View.OnClickListener() {
@@ -137,8 +142,8 @@ public class PlaceOrderFragment extends Fragment {
                 db.createBill(db.getAllFoodItems());
                 sendDataToDatabase(db.getAllFoodItems());
                 db.deleteAllFoodItems();
-                recreateActivityCompat(getActivity());
-
+                startActivity(new Intent(getContext(), MainActivity.class));
+                getActivity().finish();
             }
         });
     }
@@ -157,8 +162,7 @@ public class PlaceOrderFragment extends Fragment {
                 e.printStackTrace();
             }
         }
-
-        Log.e("JSON",jsonArray.toString());
+            Log.e("JSON",jsonArray.toString());
             Toast.makeText(getContext(),"Your Order has been placed",Toast.LENGTH_LONG).show();
         StringRequest request=new StringRequest(Request.Method.POST, Constants.URL_PROCESS_REQUEST, new Response.Listener<String>() {
             @Override
@@ -184,18 +188,13 @@ public class PlaceOrderFragment extends Fragment {
             Toast.makeText(getContext(),"No waiter added First scan QR",Toast.LENGTH_SHORT).show();
         }
     }
-
-    public  final void recreateActivityCompat(final Activity a) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            a.recreate();
+    private void setTotal() {
+        float cost=0;
+        for(int i=0;i<list.size();i++){
+            String pQty=list.get(i).getQty();
+            float price=list.get(i).getPrice();
+            cost+=price*(Float.parseFloat(pQty));
         }
-        else {
-            final Intent intent = a.getIntent();
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            a.finish();
-            a.overridePendingTransition(0, 0);
-            a.startActivity(intent);
-            a.overridePendingTransition(0, 0);
-        }
+        total.setText(String.valueOf(cost));
     }
 }

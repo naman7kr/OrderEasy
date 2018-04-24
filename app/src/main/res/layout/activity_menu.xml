@@ -23,7 +23,7 @@
         android:id="@+id/menu_vp"
         android:layout_below="@+id/menu_tabs"
         />
-    <android.support.v7.widget.Toolbar
+    <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,6 +31,48 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:id="@+id/btm_toolbar"
         android:layout_alignParentBottom="true"
-        />
+        android:gravity="center_horizontal"
+
+        >
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:id="@+id/btm_toolbar_filter_btn"
+           android:gravity="center_vertical"
+           android:layout_margin="2dp"
+           android:paddingLeft="5dp"
+           android:paddingRight="5dp"
+           >
+           <LinearLayout
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"
+               android:gravity="center_vertical"
+               >
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Filter"
+               android:textSize="20sp"
+               android:layout_marginTop="10dp"
+               android:layout_marginBottom="10dp"
+               />
+           <ImageView
+               android:layout_width="20dp"
+               android:layout_height="20dp"
+               android:src="@drawable/ic_launcher_background"
+               android:layout_marginLeft="5dp"
+               />
+           </LinearLayout>
+           <TextView
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:layout_height="wrap_content"
+               android:text="Type"
+               android:gravity="end"
+               android:id="@+id/menu_filter_type"
+               />
+       </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

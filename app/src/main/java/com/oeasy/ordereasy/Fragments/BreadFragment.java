@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -50,7 +49,7 @@ public class BreadFragment extends BaseFragment implements NoInternetInterface,M
     private MenuItemAdapter adapter;
     private ProgressBar pBar;
     LinearLayout ref,erll;
-    private Toolbar btmToolbar;
+    private LinearLayout btmToolbar;
 
     @Nullable
     @Override
@@ -161,7 +160,12 @@ public class BreadFragment extends BaseFragment implements NoInternetInterface,M
             public void setToolbarIcon(MenuItem item,SearchView searchView) {
 
             }
+
+            @Override
+            public void filterItems(String title) {
+            }
         }.setSearchToolbar();
+
 
     }
 
@@ -212,7 +216,7 @@ public class BreadFragment extends BaseFragment implements NoInternetInterface,M
 
     @Override
     public void setToolbarIcon(MenuItem item,SearchView searchView) {
-        searchView.setQueryHint("Search in Dessert");
+        searchView.setQueryHint("Search in Breads");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -233,6 +237,29 @@ public class BreadFragment extends BaseFragment implements NoInternetInterface,M
                 return true;
             }
         });
+    }
+
+    @Override
+    public void filterItems(String title) {
+        ArrayList<FoodItem> fList=new ArrayList<>();
+        if(title.compareTo("Veg")==0){
+            for(int i=0;i<breadList.size();i++){
+                if(breadList.get(i).getCategory()==0){
+                    fList.add(breadList.get(i));
+                }
+            }
+        }else if(title.compareTo("Non Veg")==0){
+            for(int i=0;i<breadList.size();i++){
+                if(breadList.get(i).getCategory()==1){
+                    fList.add(breadList.get(i));
+                }
+            }
+        }else{
+            for(int i=0;i<breadList.size();i++){
+                fList.add(breadList.get(i));
+            }
+        }
+        setAdapter(getContext(),fList,rView);
     }
 
 }

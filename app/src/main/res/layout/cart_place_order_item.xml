@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textAlignment="center"
-        android:text="Qty-half"
+        android:text="Qty-1/2"
         android:id="@+id/place_order_item_quantity"
         />
     <TextView

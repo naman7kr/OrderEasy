@@ -36,9 +36,7 @@ public class MainActivity extends BaseActivity {
         setFab();
 
         setBottomNavigation();
-
     }
-
     private void initialize() {
         mPager=findViewById(R.id.main_vp);
         mBtmNav=findViewById(R.id.main_btmnav);
@@ -102,8 +100,12 @@ public class MainActivity extends BaseActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.main_home:
+                        if(db.countWaiter()!=0){
+                            fab.setVisibility(View.GONE);
+                        }else {
+                            fab.setVisibility(View.VISIBLE);
+                        }
                         mPager.setCurrentItem(0);
-                        fab.setVisibility(View.VISIBLE);
                         return true;
                     case R.id.main_profile:
                         mPager.setCurrentItem(1);

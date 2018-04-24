@@ -19,11 +19,11 @@ import java.util.ArrayList;
 public class CartPlaceOrderAdapter extends RecyclerView.Adapter<CartPlaceOrderAdapter.MyViewHolder> {
     private ArrayList<FoodItem> items;
     private Context context;
-    private static int tag;
-    public CartPlaceOrderAdapter(Context context, ArrayList<FoodItem> items,int TAG){
+
+    public CartPlaceOrderAdapter(Context context, ArrayList<FoodItem> items){
         this.items=items;
         this.context=context;
-        tag=TAG;
+
     }
     @Override
     public CartPlaceOrderAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -36,9 +36,13 @@ public class CartPlaceOrderAdapter extends RecyclerView.Adapter<CartPlaceOrderAd
     public void onBindViewHolder(CartPlaceOrderAdapter.MyViewHolder holder, int position) {
         FoodItem current=items.get(position);
         holder.fName.setText(current.getName());
-        holder.fQty.setText(current.getQty());
-        holder.fCost.setText(String.valueOf(current.getPrice()));
-        if(tag==0){
+        String sQty=current.getQty();
+        float qty= Float.parseFloat(sQty);
+        String cost=String.valueOf(current.getPrice()*qty);
+        holder.fQty.setText("Qty - "+sQty);
+        current.setCost(cost);
+        holder.fCost.setText(cost);
+        if(items.get(position).getTag()==0){
         holder.fTag.setVisibility(View.VISIBLE);
         }else{
             holder.fTag.setVisibility(View.GONE);

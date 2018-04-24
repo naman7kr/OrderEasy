@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -37,7 +36,8 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
     private ImageView dialogImage;
     DatabaseHelper db;
     int alreadyPresent;
-
+    Spinner sp;
+    private TextView aldyPresent;
     public HomeRecyclerAdapter(Context context, ArrayList<FoodItem> items) {
         this.items=items;
         this.context=context;
@@ -64,15 +64,24 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
 
                 showFoodDialog(context,current);
                 alreadyPresent=db.countFoodItem(current);
+                if(alreadyPresent==0){
+                    aldyPresent.setVisibility(View.GONE);
+                }else{
+                    aldyPresent.setVisibility(View.VISIBLE);
+                }
+                Log.e("FCOUNT", String.valueOf(alreadyPresent));
                 Button addToCart=fDialog.findViewById(R.id.dialog_addbtn);
                 addToCart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(alreadyPresent==0)
-                         db.createFoodItems(current);
+                        String spItem= (String) sp.getSelectedItem();
+                        spItem=spItem.replace("Qty ","");
+                        if(alreadyPresent==0){
+                        current.setQty(spItem);
+                        db.createFoodItems(current);
+                        }
                         else{
-
-
+                            db.updateFoodQty(current.getFid(),spItem);
                         }
                         fDialog.dismiss();
                     }
@@ -96,26 +105,15 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
     private void setDialogfContents(Context context, FoodItem item, Dialog fDialog) {
         TextView fName = fDialog.findViewById(R.id.dialog_name);
         ImageView fImg = fDialog.findViewById(R.id.dialog_fimage);
-
+        aldyPresent=fDialog.findViewById(R.id.dialog_alpresent);
         TextView price=fDialog.findViewById(R.id.dialog_price);
         TextView desc=fDialog.findViewById(R.id.dialog_description);
-        Spinner sp=fDialog.findViewById(R.id.dialog_sp_qty);
+        sp=fDialog.findViewById(R.id.dialog_sp_qty);
         if (item.getImg() != null) {
             Picasso.with(context).load(Constants.IMG_ROOT+item.getImg()).into(fImg);
                   Log.e("LOL",Constants.IMG_ROOT+item.getImg());
         }
         setSpinner(sp,item);
-        sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         price.setText( String.valueOf(item.getPrice()));
         desc.setText(item.getDesc());

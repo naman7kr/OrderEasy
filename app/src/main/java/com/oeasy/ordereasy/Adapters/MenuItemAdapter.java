@@ -35,6 +35,8 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
     Dialog fDialog;
     DatabaseHelper db;
     int alreadyPresent;
+    Spinner sp;
+    private TextView aldyPresent;
     public MenuItemAdapter(Context context, ArrayList<FoodItem> list){
         this.list=list;
         this.context=context;
@@ -48,10 +50,11 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
         final FoodItem item=list.get(position);
         holder.fName.setText(item.getName());
         holder.fPrice.setText(String.valueOf(item.getPrice()));
+
         if (item.getImg() != null)
             Utilities.setPicassoImage(context, Constants.IMG_ROOT+item.getImg(), holder.fImg, Constants.SQUA_PLACEHOLDER);
         holder.fView.setOnClickListener(new View.OnClickListener() {
@@ -63,13 +66,17 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                 addToCart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(alreadyPresent==0)
+                        String spItem= (String) sp.getSelectedItem();
+                        spItem.replace("Qty ","");
+
+                        if(alreadyPresent==0){
+                            aldyPresent.setVisibility(View.GONE);
+                            item.setQty(spItem);
                             db.createFoodItems(item);
-                        else{
                         }
-                        ArrayList<FoodItem> dbResponse=db.getAllFoodItems();
-                        for (int i = 0;i<dbResponse.size();i++){
-                            Log.e("RES",dbResponse.get(i).getName());
+                        else{
+                            db.updateFoodQty(item.getFid(),spItem);
+                            aldyPresent.setVisibility(View.VISIBLE);
                         }
                         fDialog.dismiss();
                     }
@@ -93,7 +100,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
         ImageView fImg = fDialog.findViewById(R.id.dialog_fimage);
         TextView price=fDialog.findViewById(R.id.dialog_price);
         TextView desc=fDialog.findViewById(R.id.dialog_description);
-        Spinner sp=fDialog.findViewById(R.id.dialog_sp_qty);
+        sp=fDialog.findViewById(R.id.dialog_sp_qty);
         if (item.getImg() != null)
             Utilities.setPicassoImage(context, Constants.IMG_ROOT+item.getImg(), fImg, Constants.SQUA_PLACEHOLDER);
         setSpinner(sp,item);

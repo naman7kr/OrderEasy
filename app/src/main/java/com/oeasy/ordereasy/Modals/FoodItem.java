@@ -23,10 +23,28 @@ public class FoodItem {
     private int type;
     private int category;
     private float price;
+    private String cost;
     private int qtyType;
     private String qty;
     private int fid;
     private float rating;
+    private int tag;
+
+    public String getCost() {
+        return cost;
+    }
+
+    public void setCost(String cost) {
+        this.cost = cost;
+    }
+
+    public int getTag() {
+        return tag;
+    }
+
+    public void setTag(int tag) {
+        this.tag = tag;
+    }
 
     public float getRating() {
         return rating;

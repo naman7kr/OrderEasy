@@ -18,14 +18,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.MainActivity" />
+        <activity android:name=".Activities.MainActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".Activities.ScannerActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".Activities.MenuActivity" />
-        <activity android:name=".Activities.CartActivity" />
-        <activity android:name=".Activities.LoginActivity">
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activities.MenuActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activities.CartActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activities.LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

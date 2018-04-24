@@ -6,13 +6,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -20,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -53,7 +50,7 @@ public class StartersFragment extends BaseFragment implements NoInternetInterfac
     private RecyclerView rView;
     private ProgressBar pBar;
     LinearLayout ref,erll;
-    private Toolbar btmToolbar;
+    private LinearLayout btmToolbar;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -168,6 +165,11 @@ public class StartersFragment extends BaseFragment implements NoInternetInterfac
             public void setToolbarIcon(MenuItem item,SearchView searchView) {
 
             }
+
+            @Override
+            public void filterItems(String title) {
+                
+            }
         }.setSearchToolbar();
 
     }
@@ -257,6 +259,31 @@ public class StartersFragment extends BaseFragment implements NoInternetInterfac
             });
 
 
+    }
+
+    @Override
+    public void filterItems(String title) {
+        ArrayList<FoodItem> fList=new ArrayList<>();
+        if(title.compareTo("Veg")==0){
+            for(int i=0;i<sList.size();i++){
+                Log.e("LOL",sList.get(i).getName()+" "+sList.get(i).getCategory());
+                if(sList.get(i).getCategory()==0){
+                    fList.add(sList.get(i));
+                }
+            }
+        }else if(title.compareTo("Non Veg")==0){
+            for(int i=0;i<sList.size();i++){
+                if(sList.get(i).getCategory()==1){
+                    fList.add(sList.get(i));
+                }
+            }
+        }else{
+            for(int i=0;i<sList.size();i++){
+                fList.add(sList.get(i));
+            }
+        }
+
+       setAdapter(getContext(),fList,rView);
     }
 
 }

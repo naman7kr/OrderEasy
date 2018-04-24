@@ -1,8 +1,6 @@
 package com.oeasy.ordereasy.Interfaces;
 
-import android.app.Activity;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 /**
@@ -12,4 +10,5 @@ import android.view.MenuItem;
 public interface MenuBtmSearchInterface {
     void setSearchToolbar();
     void setToolbarIcon(MenuItem item, SearchView searchView);
+    void filterItems(String title);
 }

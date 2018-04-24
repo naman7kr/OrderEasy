@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+       android:title="Veg"
+        android:id="@+id/pop_up_veg"
+        />
+    <item
+        android:title="Non Veg"
+        android:id="@+id/pop_up_nonveg"
+        />
+    <item
+        android:title="All"
+        android:id="@+id/pop_up_all"
+        />
+</menu>

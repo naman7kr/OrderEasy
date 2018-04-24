@@ -82,9 +82,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // on upgrade drop older tables
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FOOD_ITEMS);
+        db.execSQL("DROP TABLE IF EXISTS " +TABLE_FOOD_ITEMS);
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_WAITER);
-        db.execSQL("DROP TABLE IF EXISTS "+TABLE_BILL);
+        db.execSQL("DROP TABLE IF EXISTS "+ TABLE_BILL);
         // create new tables
         onCreate(db);
     }
@@ -138,7 +138,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     public int countFoodItem(FoodItem fItem){
         SQLiteDatabase db = this.getWritableDatabase();
-        String countQuery="SELECT * FROM "+TABLE_FOOD_ITEMS+" WHERE "+KEY_ID+"='"+fItem.getId()+"'";
+        String countQuery="SELECT * FROM "+TABLE_FOOD_ITEMS+" WHERE "+KEY_FOOD_ID+"='"+fItem.getFid()+"'";
         Cursor cursor = db.rawQuery(countQuery, null);
         int count = cursor.getCount();
         cursor.close();
@@ -159,6 +159,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int count = cursor.getCount();
         cursor.close();
         return count;
+    }
+    public void updateFoodQty(int id,String qty){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query="UPDATE "+TABLE_FOOD_ITEMS+ " SET "+KEY_QTY+"='"+qty+"' WHERE "+KEY_FOOD_ID+"='"+id+"'";
+        db.execSQL(query);
     }
     public void setRating(int id,float rating){
         SQLiteDatabase db = this.getWritableDatabase();

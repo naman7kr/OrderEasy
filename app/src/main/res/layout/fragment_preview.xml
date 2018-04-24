@@ -11,17 +11,9 @@
     <android.support.v7.widget.RecyclerView
     android:id="@+id/verticalRecyclerView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_marginTop="10dp"
-        android:layout_below="@+id/horizontalRecyclerView"
-        android:layout_above="@id/cart_submit_rating_btn"
+    android:layout_below="@+id/horizontalRecyclerView"
     />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Submit Rating"
-        android:id="@+id/cart_submit_rating_btn"
-        />
+
 </RelativeLayout>

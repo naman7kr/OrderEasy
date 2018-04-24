@@ -6,8 +6,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -28,13 +29,13 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
     private ArrayList<FoodItem> foodItemArrayList;
     private Context context;
     private DatabaseHelper db;
-    private int tag;
 
-    public VerticalRecyclerViewAdapter(Context context,ArrayList<FoodItem> foodItems,int tag) {
+
+    public VerticalRecyclerViewAdapter(Context context,ArrayList<FoodItem> foodItems) {
         this.foodItemArrayList=foodItems;
         this.context=context;
         db=new DatabaseHelper(context);
-        this.tag=tag;
+
     }
 
     @Override
@@ -54,8 +55,8 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
         final VerticalRecyclerViewAdapter.MessageViewHolder messageViewHolder =holder;
         messageViewHolder.fName.setText(fdItem.getName());
         messageViewHolder.fDescription.setText(fdItem.getDesc());
-
-        if(tag==0){
+        setSpinner(holder.fSpinner,fdItem);
+        if(foodItemArrayList.get(position).getTag()==0){
             messageViewHolder.fTag.setVisibility(View.VISIBLE);
             messageViewHolder.remBtn.setVisibility(View.VISIBLE);
         }else{
@@ -74,17 +75,55 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
         if (fdItem.getImg() != null)
             Utilities.setPicassoImage(context, Constants.IMG_ROOT+fdItem.getImg(), holder.fImage, Constants.SQUA_PLACEHOLDER);
         messageViewHolder.fPrice.setText(String.valueOf(fdItem.getPrice()));
-        messageViewHolder.rBar.setRating(fdItem.getRating());
-        messageViewHolder.rBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                holder.rBar.setIsIndicator(false);
-                db.setRating(fdItem.getFid(),rating);
-            //    messageViewHolder.rBar.setRating(fdItem.getRating());
-            }
-        });
 
     }
+
+    private void setSpinner(final Spinner sp, final FoodItem item) {
+
+        ArrayAdapter<CharSequence> adapter=null;
+        int arrayId;
+        if(item.getQtyType()==0) {
+            adapter = ArrayAdapter.createFromResource(context, R.array.Qty_for_desserts_and_drinks, android.R.layout.simple_spinner_item);
+            arrayId=R.array.Qty_for_desserts_and_drinks;
+        }
+        else if(item.getQtyType()==1)
+        {
+            adapter=ArrayAdapter.createFromResource(context,R.array.Qty_for_maincourse_and_starters,android.R.layout.simple_spinner_item);
+            arrayId=R.array.Qty_for_maincourse_and_starters;
+        }
+        else
+        {
+            adapter=ArrayAdapter.createFromResource(context,R.array.Qty_for_bread,android.R.layout.simple_spinner_item);
+            arrayId=R.array.Qty_for_bread;
+        }
+        String [] quantity=context.getResources().getStringArray(arrayId);
+
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        sp.setAdapter(adapter);
+        for(int i=0;i<quantity.length;i++){
+            String qty=quantity[i].replace("Qty ","");
+            if(item.getQty().compareTo(qty)==0){
+                sp.setSelection(i);
+                break;
+            }else{
+                sp.setSelection(0);
+            }
+        }
+        sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String sQty= (String) sp.getSelectedItem();
+                sQty=sQty.replace("Qty ","");
+                db.updateFoodQty(item.getFid(),sQty);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
     @Override
     public int getItemCount() {
         return foodItemArrayList.size();
@@ -95,9 +134,9 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
         ImageView fImage;
         TextView fPrice;
         Spinner qtySp;
-        RatingBar rBar;
         TextView remBtn;
         ImageView fTag;
+        Spinner fSpinner;
         public MessageViewHolder(View itemView) {
             super(itemView);
             initialize(itemView);
@@ -108,10 +147,10 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
             fImage=itemView.findViewById(R.id.cart_item_img);
             fPrice=itemView.findViewById(R.id.cart_item_price);
             qtySp=itemView.findViewById(R.id.cart_item_qty_spinner);
-            rBar=itemView.findViewById(R.id.cart_rating_bar);
             remBtn=itemView.findViewById(R.id.cart_item_remove_btn);
             remBtn.setTextColor(Color.RED);
             fTag=itemView.findViewById(R.id.cart_item_tag);
+            fSpinner=itemView.findViewById(R.id.cart_item_qty_spinner);
         }
     }
 }

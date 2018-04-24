@@ -108,14 +108,13 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
     public void handleResult(Result result) {
         String sResult=result.getText();
 
-        if(checkQRAcceptance(sResult)){
+        if(checkQRAcceptance(sResult)&&db.countWaiter()==0){
             String table_no=sResult.toLowerCase().replace("table ","").replace(" ","");
             Log.e("QR",table_no);
             sendWaiterRequest(table_no);
             startActivity(new Intent(this,CartActivity.class));
             finish();
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-
         }
         else {
             Toast.makeText(this,"QR not accepted",Toast.LENGTH_LONG).show();
@@ -139,8 +138,8 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
                             waiter.setTable_no(tableNo);
                     waiter.setContact_no(waiters.getString("contact"));
                             waiter.setWaiter_id(waiters.getInt("id"));
+                            if(db.countWaiter()==0)
                             db.addWaiter(waiter);
-                            Log.e("Waiter",waiter.getName());
 
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,7 +48,7 @@ public class MainCourseFragment extends BaseFragment implements NoInternetInterf
     private RecyclerView rView;
     private ProgressBar pBar;
         LinearLayout ref,erll;
-    private Toolbar btmToolbar;
+    private LinearLayout btmToolbar;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -163,6 +162,11 @@ public class MainCourseFragment extends BaseFragment implements NoInternetInterf
             public void setToolbarIcon(MenuItem item,SearchView searchView) {
 
             }
+
+            @Override
+            public void filterItems(String title) {
+
+            }
         }.setSearchToolbar();
 
     }
@@ -237,5 +241,29 @@ public class MainCourseFragment extends BaseFragment implements NoInternetInterf
 
 
     }
+
+    @Override
+    public void filterItems(String title) {
+        ArrayList<FoodItem> fList=new ArrayList<>();
+        if(title.compareTo("Veg")==0){
+            for(int i=0;i<mcList.size();i++){
+                if(mcList.get(i).getCategory()==0){
+                    fList.add(mcList.get(i));
+                }
+            }
+        }else if(title.compareTo("Non Veg")==0){
+            for(int i=0;i<mcList.size();i++){
+                if(mcList.get(i).getCategory()==1){
+                    fList.add(mcList.get(i));
+                }
+            }
+        }else{
+            for(int i=0;i<mcList.size();i++){
+                fList.add(mcList.get(i));
+            }
+        }
+        setAdapter(getContext(),fList,rView);
+    }
+
 
 }
