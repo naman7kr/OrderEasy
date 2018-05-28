@@ -1,5 +1,6 @@
 package com.oeasy.ordereasy.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,7 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
+import com.oeasy.ordereasy.Activities.ScannerActivity;
 import com.oeasy.ordereasy.Adapters.HorizontalRecyclerViewAdapter;
 import com.oeasy.ordereasy.Adapters.VerticalRecyclerViewAdapter;
 import com.oeasy.ordereasy.Modals.FoodItem;
@@ -34,7 +38,9 @@ public class PreviewFragment extends Fragment {
     private ArrayList<WaiterModel> waitersList;
     private ArrayList<FoodItem> itemsList;
     private DatabaseHelper db;
-
+    private LinearLayout scanQrView;
+    private LinearLayout waiterContainer;
+    private Button scanBtn;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,18 +51,39 @@ public class PreviewFragment extends Fragment {
 
         setCartLayout();
         setWaitersLayout();
-       // getCartItems();
-//        getWaiters();
         setRatingToDatabase();
-      //  updateItemOnPageChange();
+        checkWaiter();
         return view;
     }
+
+    private void checkWaiter() {
+        Log.e("LOL", String.valueOf(db.countWaiter()));
+        if(db.countWaiter()==0){
+            scanQrView.setVisibility(View.VISIBLE);
+            waiterContainer.setVisibility(View.INVISIBLE);
+            scanBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getContext(), ScannerActivity.class));
+                    getActivity().finish();
+                }
+            });
+        }
+        else {
+            scanQrView.setVisibility(View.GONE);
+            waiterContainer.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void initialize(View view) {
         mVerticalRecyclerView=view.findViewById(R.id.verticalRecyclerView);
         mHorizontalRecyclerView = view.findViewById(R.id.horizontalRecyclerView);
         waitersList=new ArrayList<>();
         itemsList=new ArrayList<>();
         db = new DatabaseHelper(getContext());
+        scanQrView=view.findViewById(R.id.cart_scanqr_view);
+        waiterContainer=view.findViewById(R.id.waiter_container);
+        scanBtn=view.findViewById(R.id.cart_scanQR_btn);
     }
     private void setRatingToDatabase() {
 

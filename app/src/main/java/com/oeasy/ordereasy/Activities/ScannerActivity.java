@@ -124,6 +124,7 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
     }
 
     private void sendWaiterRequest(final String tableNo) {
+        Log.e("TABLE",tableNo);
         StringRequest request=new StringRequest(Request.Method.POST, Constants.URL_PROCESS_REQUEST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -131,12 +132,10 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
                 try {
                         Log.e("LOLA",response);
                         JSONObject waiters = new JSONObject(response);
-
-
                             WaiterModel waiter=new WaiterModel();
                             waiter.setName(waiters.getString("name"));
                             waiter.setTable_no(tableNo);
-                    waiter.setContact_no(waiters.getString("contact"));
+                    waiter.setContact_no(waiters.getString("contact_no"));
                             waiter.setWaiter_id(waiters.getInt("id"));
                             if(db.countWaiter()==0)
                             db.addWaiter(waiter);

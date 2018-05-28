@@ -63,6 +63,11 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                 showFoodDialog(context,item);
                 alreadyPresent=db.countFoodItem(item);
                 Button addToCart=fDialog.findViewById(R.id.dialog_addbtn);
+                if(alreadyPresent==0){
+                    aldyPresent.setVisibility(View.GONE);
+                }else{
+                    aldyPresent.setVisibility(View.VISIBLE);
+                }
                 addToCart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -70,13 +75,11 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                         spItem.replace("Qty ","");
 
                         if(alreadyPresent==0){
-                            aldyPresent.setVisibility(View.GONE);
                             item.setQty(spItem);
                             db.createFoodItems(item);
                         }
                         else{
                             db.updateFoodQty(item.getFid(),spItem);
-                            aldyPresent.setVisibility(View.VISIBLE);
                         }
                         fDialog.dismiss();
                     }
@@ -100,6 +103,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
         ImageView fImg = fDialog.findViewById(R.id.dialog_fimage);
         TextView price=fDialog.findViewById(R.id.dialog_price);
         TextView desc=fDialog.findViewById(R.id.dialog_description);
+        aldyPresent=fDialog.findViewById(R.id.dialog_alpresent);
         sp=fDialog.findViewById(R.id.dialog_sp_qty);
         if (item.getImg() != null)
             Utilities.setPicassoImage(context, Constants.IMG_ROOT+item.getImg(), fImg, Constants.SQUA_PLACEHOLDER);

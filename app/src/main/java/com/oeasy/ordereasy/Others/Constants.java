@@ -5,7 +5,7 @@ package com.oeasy.ordereasy.Others;
  */
 
 public class Constants {
- //  private static final String IP="192.168.43.193";
+   //  private static final String IP="192.168.43.193";
     private static final String IP="192.168.43.114";
     private static final String ROOT_URL="http://"+IP+"/ORDER_EASY/";
     public static final String IMG_ROOT=ROOT_URL+"img/";

@@ -37,7 +37,6 @@
        <LinearLayout
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:id="@+id/btm_toolbar_filter_btn"
            android:gravity="center_vertical"
            android:layout_margin="2dp"
            android:paddingLeft="5dp"
@@ -47,7 +46,8 @@
                android:layout_width="0dp"
                android:layout_height="wrap_content"
                android:layout_weight="1"
-               android:gravity="center_vertical"
+               android:gravity="center"
+               android:id="@+id/btm_toolbar_filter_btn"
                >
            <TextView
                android:layout_width="wrap_content"
@@ -60,7 +60,7 @@
            <ImageView
                android:layout_width="20dp"
                android:layout_height="20dp"
-               android:src="@drawable/ic_launcher_background"
+               android:src="@drawable/ic_filter"
                android:layout_marginLeft="5dp"
                />
            </LinearLayout>
@@ -68,9 +68,10 @@
                android:layout_width="0dp"
                android:layout_weight="1"
                android:layout_height="wrap_content"
-               android:text="Type"
-               android:gravity="end"
+               android:text="All"
+               android:gravity="center"
                android:id="@+id/menu_filter_type"
+               android:textSize="20sp"
                />
        </LinearLayout>
     </LinearLayout>

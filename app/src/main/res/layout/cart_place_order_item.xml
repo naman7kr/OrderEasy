@@ -3,12 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_marginTop="10dp"
     android:layout_marginBottom="10dp"
+    android:gravity="center_vertical"
     >
     <ImageView
-        android:layout_width="15dp"
-        android:layout_height="10dp"
-        android:src="@drawable/ic_launcher_background"
+        android:layout_width="20dp"
+        android:layout_height="15dp"
+        android:src="@drawable/ic_new"
         android:id="@+id/place_order_item_tag"
+        android:layout_gravity="top"
         />
     <TextView
         android:layout_width="0dp"
@@ -27,12 +29,24 @@
         android:text="Qty-1/2"
         android:id="@+id/place_order_item_quantity"
         />
-    <TextView
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:gravity="center"
+
+        >
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:src="@drawable/ic_rupee"
+            />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textAlignment="center"
         android:text="1000"
         android:id="@+id/place_order_item_cost"
         />
+    </LinearLayout>
 </LinearLayout>

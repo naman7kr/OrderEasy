@@ -15,12 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.oeasy.ordereasy.Activities.MenuActivity;
 import com.oeasy.ordereasy.Adapters.MenuItemAdapter;
 import com.oeasy.ordereasy.Interfaces.MenuBtmSearchInterface;
@@ -50,7 +52,7 @@ public class RecommendedFragment extends BaseFragment implements NoInternetInter
     private ProgressBar pBar;
     LinearLayout ref,erll;
     private LinearLayout btmToolbar;
-
+    private TextView noRec;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,7 +75,7 @@ public class RecommendedFragment extends BaseFragment implements NoInternetInter
         erll=view.findViewById(R.id.no_connection_view);
         MenuActivity activity= (MenuActivity) getActivity();
         btmToolbar=activity.findViewById(R.id.btm_toolbar);
-
+        noRec=view.findViewById(R.id.rec_norecommended);
         erll.setVisibility(View.GONE);
         rView.setVisibility(View.GONE);
         pBar.setVisibility(View.VISIBLE);
@@ -110,6 +112,11 @@ public class RecommendedFragment extends BaseFragment implements NoInternetInter
                         adapter.notifyDataSetChanged();
                         }
                     }
+                    if(rList.size()==0){
+                        noRec.setVisibility(View.VISIBLE);
+                    }else{
+                        noRec.setVisibility(View.GONE);
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -126,7 +133,7 @@ public class RecommendedFragment extends BaseFragment implements NoInternetInter
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params= new HashMap<>();
-                params.put("all", "s");
+                params.put("all", GoogleSignIn.getLastSignedInAccount(getContext()).getEmail());
                 return params;
             }
         };
@@ -260,5 +267,4 @@ public class RecommendedFragment extends BaseFragment implements NoInternetInter
         }
         setAdapter(getContext(),fList,rView);
     }
-
 }

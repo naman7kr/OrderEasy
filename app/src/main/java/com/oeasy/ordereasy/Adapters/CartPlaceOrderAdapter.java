@@ -36,7 +36,7 @@ public class CartPlaceOrderAdapter extends RecyclerView.Adapter<CartPlaceOrderAd
     public void onBindViewHolder(CartPlaceOrderAdapter.MyViewHolder holder, int position) {
         FoodItem current=items.get(position);
         holder.fName.setText(current.getName());
-        String sQty=current.getQty();
+        String sQty=current.getQty().replace("Qty ","");
         float qty= Float.parseFloat(sQty);
         String cost=String.valueOf(current.getPrice()*qty);
         holder.fQty.setText("Qty - "+sQty);

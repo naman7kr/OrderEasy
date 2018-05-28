@@ -25,6 +25,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.oeasy.ordereasy.Activities.MenuActivity;
 import com.oeasy.ordereasy.Adapters.HomeRecyclerAdapter;
 import com.oeasy.ordereasy.Adapters.HomeSliderAdapter;
@@ -130,11 +131,12 @@ public class HomeFragment extends Fragment implements NoInternetInterface, ViewP
                         fItem.setFid(item.getInt("id"));
                         fItem.setType(item.getInt("item_type"));
                         typeLists.get(fItem.getType()).add(fItem);
-                        Log.e("LOL", String.valueOf(fItem.getType()));
+
                         HomeRecyclerAdapter ad = adapterList.get(fItem.getType());
                         ad.notifyDataSetChanged();
                     }
                     setSlider();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -150,7 +152,8 @@ public class HomeFragment extends Fragment implements NoInternetInterface, ViewP
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params= new HashMap<>();
-                params.put("home", "s");
+                Log.e("sdf",GoogleSignIn.getLastSignedInAccount(getContext()).getEmail());
+                params.put("home", GoogleSignIn.getLastSignedInAccount(getContext()).getEmail());
                 return params;
             }
         };

@@ -38,9 +38,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="10dp"
-                            android:src="@drawable/ic_launcher_background"
+                            android:layout_width="25dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_new"
                             android:id="@+id/cart_item_tag"
                             />
                 <TextView
@@ -50,7 +50,7 @@
                     android:text="Paneer Do Pyaza"
                     android:textSize="20sp"
                     android:id="@+id/cart_item_name"
-                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/cart_item_tag"
                     />
                         <TextView
                             android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:layout_marginLeft="3dp"
-                    android:src="@drawable/ic_launcher_background"
+                    android:src="@drawable/ic_rupee"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -96,19 +96,34 @@
                     android:layout_marginLeft="2dp"
                     android:id="@+id/cart_item_price"
                     />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="/unit"
+                    android:layout_marginLeft="2dp"
+                    />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight=".4"
                     android:layout_marginLeft="60dp"
                     />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/cart_item_orderpresent"
+                    android:text="Order already placed"
+                    android:textColor="#ff0000"
+                    />
                 <Spinner
                     android:id="@+id/cart_item_qty_spinner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".5"
+                    android:layout_weight=".8"
                     android:layout_gravity="right"
                     android:layout_marginRight="5dp"
+
                     />
 
 

@@ -35,7 +35,6 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
         this.foodItemArrayList=foodItems;
         this.context=context;
         db=new DatabaseHelper(context);
-
     }
 
     @Override
@@ -59,9 +58,13 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
         if(foodItemArrayList.get(position).getTag()==0){
             messageViewHolder.fTag.setVisibility(View.VISIBLE);
             messageViewHolder.remBtn.setVisibility(View.VISIBLE);
+            messageViewHolder.fSpinner.setVisibility(View.VISIBLE);
+            messageViewHolder.fAlreadyPlaced.setVisibility(View.GONE);
         }else{
             messageViewHolder.fTag.setVisibility(View.GONE);
             messageViewHolder.remBtn.setVisibility(View.GONE);
+            messageViewHolder.fSpinner.setVisibility(View.GONE);
+            messageViewHolder.fAlreadyPlaced.setVisibility(View.VISIBLE);
         }
         messageViewHolder.remBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,6 +140,7 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
         TextView remBtn;
         ImageView fTag;
         Spinner fSpinner;
+        TextView fAlreadyPlaced;
         public MessageViewHolder(View itemView) {
             super(itemView);
             initialize(itemView);
@@ -151,6 +155,7 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
             remBtn.setTextColor(Color.RED);
             fTag=itemView.findViewById(R.id.cart_item_tag);
             fSpinner=itemView.findViewById(R.id.cart_item_qty_spinner);
+            fAlreadyPlaced=itemView.findViewById(R.id.cart_item_orderpresent);
         }
     }
 }

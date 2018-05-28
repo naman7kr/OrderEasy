@@ -2,17 +2,23 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android" >
     <include layout="@layout/include_no_connection"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Recommended Items For You...Please give the rating for food first"
+        android:id="@+id/rec_norecommended"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        />
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:id="@+id/menu_recommended_progress"
-
         />
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/rec_rview"
         />
-
 </RelativeLayout>
