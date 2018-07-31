@@ -1,6 +1,7 @@
 package com.oeasy.ordereasy.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,7 +17,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.zxing.Result;
+import com.oeasy.ordereasy.Modals.UserInformation;
 import com.oeasy.ordereasy.Modals.WaiterModel;
 import com.oeasy.ordereasy.Others.Constants;
 import com.oeasy.ordereasy.Others.DatabaseHelper;
@@ -109,9 +113,21 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
         String sResult=result.getText();
 
         if(checkQRAcceptance(sResult)&&db.countWaiter()==0){
+            GoogleSignInAccount account= GoogleSignIn.getLastSignedInAccount(this);
             String table_no=sResult.toLowerCase().replace("table ","").replace(" ","");
             Log.e("QR",table_no);
-            sendWaiterRequest(table_no);
+            JSONObject jObj=new JSONObject();
+            try {
+                jObj.put("username", account.getEmail());
+                jObj.put("table_no",table_no);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            sendWaiterRequest(jObj);
+            SharedPreferences sp = getSharedPreferences("table",MODE_PRIVATE);
+            SharedPreferences.Editor ed= sp.edit();
+            ed.putString("table_no",table_no);
+            ed.commit();
             startActivity(new Intent(this,CartActivity.class));
             finish();
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
@@ -123,37 +139,22 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
         }
     }
 
-    private void sendWaiterRequest(final String tableNo) {
-        Log.e("TABLE",tableNo);
+    private void sendWaiterRequest(final JSONObject jsonObject) {
+
         StringRequest request=new StringRequest(Request.Method.POST, Constants.URL_PROCESS_REQUEST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
-                try {
-                        Log.e("LOLA",response);
-                        JSONObject waiters = new JSONObject(response);
-                            WaiterModel waiter=new WaiterModel();
-                            waiter.setName(waiters.getString("name"));
-                            waiter.setTable_no(tableNo);
-                    waiter.setContact_no(waiters.getString("contact_no"));
-                            waiter.setWaiter_id(waiters.getInt("id"));
-                            if(db.countWaiter()==0)
-                            db.addWaiter(waiter);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Log.e("NOOOO",error.toString());
             }
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params= new HashMap<>();
-                params.put("waiter_table", tableNo);
+                params.put("qr_scan", jsonObject.toString());
                 return params;
             }
         };
@@ -185,7 +186,7 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         if(checkPermission())
         sView.stopCamera();

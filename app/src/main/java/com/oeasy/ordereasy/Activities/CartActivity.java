@@ -79,6 +79,10 @@ public class CartActivity extends BaseActivity {
                 startActivity(new Intent(this,MenuActivity.class));
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 return true;
+            case R.id.cart_table_info:
+                startActivity(new Intent(this,TableInformationActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

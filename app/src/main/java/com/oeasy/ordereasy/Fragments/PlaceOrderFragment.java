@@ -1,6 +1,7 @@
 package com.oeasy.ordereasy.Fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -38,6 +39,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by Stan on 4/14/2018.
  */
@@ -50,6 +53,7 @@ public class PlaceOrderFragment extends Fragment {
     private TextView total;
     private Button poBtn;
     private static int TAG = 0;
+    String tn;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -75,7 +79,9 @@ public class PlaceOrderFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 if(position==1){
-                    if(db.countWaiter()==0){
+                    SharedPreferences sp = getContext().getSharedPreferences("table",MODE_PRIVATE);
+                    tn=sp.getString("table_no","");
+                    if(tn.compareTo("")==0){
                         poBtn.setEnabled(false);
                         poBtn.setText("First Scan QR");
                     }else{
@@ -150,8 +156,8 @@ public class PlaceOrderFragment extends Fragment {
     private void sendDataToDatabase(ArrayList<FoodItem> fList) {
 
             final JSONArray jsonArray=new JSONArray();
-        if(db.countWaiter()!=0){
-        String tableNo=db.getAllWaiters().get(0).getTable_no();
+        if(tn.compareTo("")!=0){
+        String tableNo=tn;
         for(int i=0;i<fList.size();i++){
             JSONObject jObject=fList.get(i).getJSONObject();
             try {

@@ -1,5 +1,6 @@
 package com.oeasy.ordereasy.Others;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -103,7 +104,13 @@ public class RequestHandler extends OrderEasyApplication {
         f9= f;
         return mInstance;
     }
+    public static synchronized RequestHandler getInstance(Activity activity) {
+        if (mInstance == null) {
+            mInstance = new RequestHandler(activity);
+        }
 
+        return mInstance;
+    }
 
 
     public static synchronized RequestHandler getInstance(Context context) {

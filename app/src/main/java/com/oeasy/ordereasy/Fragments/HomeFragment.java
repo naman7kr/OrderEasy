@@ -152,7 +152,7 @@ public class HomeFragment extends Fragment implements NoInternetInterface, ViewP
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params= new HashMap<>();
-                Log.e("sdf",GoogleSignIn.getLastSignedInAccount(getContext()).getEmail());
+
                 params.put("home", GoogleSignIn.getLastSignedInAccount(getContext()).getEmail());
                 return params;
             }

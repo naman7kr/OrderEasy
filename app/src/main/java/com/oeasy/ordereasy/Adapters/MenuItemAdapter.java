@@ -54,7 +54,6 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
         final FoodItem item=list.get(position);
         holder.fName.setText(item.getName());
         holder.fPrice.setText(String.valueOf(item.getPrice()));
-
         if (item.getImg() != null)
             Utilities.setPicassoImage(context, Constants.IMG_ROOT+item.getImg(), holder.fImg, Constants.SQUA_PLACEHOLDER);
         holder.fView.setOnClickListener(new View.OnClickListener() {
@@ -72,10 +71,12 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                     @Override
                     public void onClick(View v) {
                         String spItem= (String) sp.getSelectedItem();
-                        spItem.replace("Qty ","");
 
+                        spItem=spItem.replace("Qty ","");
+                        Log.e("item",spItem);
                         if(alreadyPresent==0){
                             item.setQty(spItem);
+
                             db.createFoodItems(item);
                         }
                         else{
@@ -108,21 +109,8 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
         if (item.getImg() != null)
             Utilities.setPicassoImage(context, Constants.IMG_ROOT+item.getImg(), fImg, Constants.SQUA_PLACEHOLDER);
         setSpinner(sp,item);
-        sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        if (item.getImg() != null) {
-            Picasso.with(context).load(Constants.IMG_ROOT+item.getImg()).into(fImg);
-            Log.e("LOL",Constants.IMG_ROOT+item.getImg());
-        }        price.setText( String.valueOf(item.getPrice()));
+        price.setText( String.valueOf(item.getPrice()));
         desc.setText(item.getDesc());
         setDialogImage(fImg);
         fName.setText(item.getName());

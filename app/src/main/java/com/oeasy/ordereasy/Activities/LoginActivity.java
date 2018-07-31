@@ -2,6 +2,7 @@ package com.oeasy.ordereasy.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -33,7 +34,7 @@ import java.util.Map;
  * Created by Stan on 4/7/2018.
  */
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG ="hello" ;
     GoogleSignInOptions gso;
     GoogleSignInClient mGoogleSignInClient;

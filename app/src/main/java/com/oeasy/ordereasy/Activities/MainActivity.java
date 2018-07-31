@@ -2,11 +2,13 @@ package com.oeasy.ordereasy.Activities;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +22,7 @@ public class MainActivity extends BaseActivity {
     private ViewPager mPager;
     private BottomNavigationView mBtmNav;
     MainBtmAdapter adapter;
-    DatabaseHelper db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +42,7 @@ public class MainActivity extends BaseActivity {
     private void initialize() {
         mPager=findViewById(R.id.main_vp);
         mBtmNav=findViewById(R.id.main_btmnav);
-        db=new DatabaseHelper(this);
+
     }
 
     private void setToolbar() {
@@ -63,9 +65,12 @@ public class MainActivity extends BaseActivity {
     }
 
     private void checkWaiter() {
-        if(db.countWaiter()!=0){
+        SharedPreferences sp = getSharedPreferences("table",MODE_PRIVATE);
+        String tn=sp.getString("table_no","");
+        Log.e("lul",tn);
+        if(tn.compareTo("")!=0){
             fab.setVisibility(View.GONE);
-        }else {
+        }else{
             fab.setVisibility(View.VISIBLE);
         }
     }

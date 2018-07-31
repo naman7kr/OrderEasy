@@ -7,14 +7,6 @@ import org.json.JSONObject;
  */
 
 public class FoodItem {
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-
-        return id;
-    }
 
     private int id;
     private String name;
@@ -29,7 +21,17 @@ public class FoodItem {
     private int fid;
     private float rating;
     private int tag;
+    public FoodItem(){
+        rating=0;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
 
+    public int getId() {
+
+        return id;
+    }
     public String getCost() {
         return cost;
     }
