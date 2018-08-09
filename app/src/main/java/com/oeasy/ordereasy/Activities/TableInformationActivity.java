@@ -74,7 +74,6 @@ public class TableInformationActivity extends BaseActivity {
                     }
                     uAdapter.notifyDataSetChanged();
                     wAdapter.notifyDataSetChanged();
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -126,7 +126,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             };
 
-            RequestHandler.getInstance(this).addToRequestQueue(request);
+        RequestHandler.getInstance(this).addToRequestQueue(request);
 
     }
 

@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.oeasy.ordereasy.Adapters.CartTabsAdapter;
-import com.oeasy.ordereasy.Fragments.PlaceOrderFragment;
+import com.oeasy.ordereasy.Fragments.BillFragment;
 import com.oeasy.ordereasy.Fragments.PreviewFragment;
 import com.oeasy.ordereasy.R;
 
@@ -49,7 +49,7 @@ public class CartActivity extends BaseActivity {
 
     private void addTabs() {
         adapter.addFragment(new PreviewFragment(), "Preview");
-        adapter.addFragment(new PlaceOrderFragment(), "Place Order");
+        adapter.addFragment(new BillFragment(), "Bill");
     }
 
     private void setToolbar() {

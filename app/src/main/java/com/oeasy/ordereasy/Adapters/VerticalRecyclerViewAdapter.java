@@ -9,9 +9,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.oeasy.ordereasy.Interfaces.ItemTouchHelperAdapter;
 import com.oeasy.ordereasy.Modals.FoodItem;
 import com.oeasy.ordereasy.Others.Constants;
 import com.oeasy.ordereasy.Others.DatabaseHelper;
@@ -19,12 +21,13 @@ import com.oeasy.ordereasy.Others.Utilities;
 import com.oeasy.ordereasy.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by utkarshh12 on 4/11/2018.
  */
 
-public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRecyclerViewAdapter.MessageViewHolder> {
+public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRecyclerViewAdapter.MessageViewHolder> implements ItemTouchHelperAdapter{
 
     private ArrayList<FoodItem> foodItemArrayList;
     private Context context;
@@ -131,6 +134,29 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
     public int getItemCount() {
         return foodItemArrayList.size();
     }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(foodItemArrayList, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(foodItemArrayList, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        db.deleteFoodItem(foodItemArrayList.get(position).getFid());
+        foodItemArrayList.remove(position);
+        notifyItemRemoved(position);
+
+    }
+
     public class MessageViewHolder extends RecyclerView.ViewHolder {
         TextView fName;
         TextView fDescription;
@@ -141,6 +167,7 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
         ImageView fTag;
         Spinner fSpinner;
         TextView fAlreadyPlaced;
+        public LinearLayout cLayout;
         public MessageViewHolder(View itemView) {
             super(itemView);
             initialize(itemView);
@@ -156,6 +183,7 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
             fTag=itemView.findViewById(R.id.cart_item_tag);
             fSpinner=itemView.findViewById(R.id.cart_item_qty_spinner);
             fAlreadyPlaced=itemView.findViewById(R.id.cart_item_orderpresent);
+            cLayout=itemView.findViewById(R.id.cart_item_layout);
         }
     }
 }

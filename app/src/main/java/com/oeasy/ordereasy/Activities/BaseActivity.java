@@ -107,7 +107,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         mDialog.findViewById(R.id.rat_cancel).setOnClickListener(this);
         mDialog.findViewById(R.id.rat_later).setOnClickListener(this);
         mDialog.findViewById(R.id.rate_yes).setOnClickListener(this);
-
     }
 
     public Toolbar getToolbar(){

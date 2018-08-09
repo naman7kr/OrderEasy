@@ -1,7 +1,9 @@
 package com.oeasy.ordereasy.Activities;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,14 +29,19 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class RatingActivity extends AppCompatActivity implements View.OnClickListener {
     private RecyclerView rView;
     private ArrayList<FoodItem> rList;
+    HashSet<FoodItem> unq;
     private Button fB;
     private Button cB;
     String data;
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +53,7 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
         cB.setOnClickListener(this);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initialize() {
         rView=findViewById(R.id.rating_rview);
         rView.setLayoutManager(new LinearLayoutManager(this));
@@ -65,11 +73,22 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
             }
             r++;
         }
+       rList=removeDuplicates(rList);
     }
     private void setAdapter() {
         rView.setAdapter(new RatingAdapter(this,rList));
     }
-
+    private ArrayList<FoodItem> removeDuplicates(ArrayList<FoodItem> list) {
+        ArrayList<FoodItem> result = new ArrayList<>();
+        HashSet<String> set = new HashSet<>();
+        for (FoodItem item : list) {
+            if (!set.contains(item.getName())) {
+                result.add(item);
+                set.add(item.getName());
+            }
+        }
+        return result;
+    }
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.rat_finish){

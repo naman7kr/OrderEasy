@@ -9,7 +9,7 @@
         />
 <item
     android:title="menu"
-    app:showAsAction="always"
+    app:showAsAction="always|collapseActionView"
     android:icon="@mipmap/ic_menu"
     android:id="@+id/cart_menu"
     />

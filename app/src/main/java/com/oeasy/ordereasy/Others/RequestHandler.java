@@ -12,7 +12,7 @@ import com.oeasy.ordereasy.Fragments.DessertFragment;
 import com.oeasy.ordereasy.Fragments.DrinksFragment;
 import com.oeasy.ordereasy.Fragments.HomeFragment;
 import com.oeasy.ordereasy.Fragments.MainCourseFragment;
-import com.oeasy.ordereasy.Fragments.PlaceOrderFragment;
+import com.oeasy.ordereasy.Fragments.BillFragment;
 import com.oeasy.ordereasy.Fragments.PreviewFragment;
 import com.oeasy.ordereasy.Fragments.RecommendedFragment;
 import com.oeasy.ordereasy.Fragments.StartersFragment;
@@ -35,10 +35,10 @@ public class RequestHandler extends OrderEasyApplication {
     public static RecommendedFragment f6;
     public static BreadFragment f7;
     public static PreviewFragment f8;
-    public static PlaceOrderFragment f9;
+    public static BillFragment f9;
 
     private RequestHandler(Context context) {
-        mCtx = context;
+            mCtx = context;
         mRequestQueue = getRequestQueue();
     }
     public static synchronized RequestHandler getInstance(Context context,HomeFragment f) {
@@ -97,7 +97,7 @@ public class RequestHandler extends OrderEasyApplication {
         f8= f;
         return mInstance;
     }
-    public static synchronized RequestHandler getInstance(Context context,PlaceOrderFragment f) {
+    public static synchronized RequestHandler getInstance(Context context,BillFragment f) {
         if (mInstance == null) {
             mInstance = new RequestHandler(context);
         }
