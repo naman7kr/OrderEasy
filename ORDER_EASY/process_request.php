@@ -194,77 +194,42 @@
 
 		$arr = $_POST['qr_scan'];
 		$data = json_decode($arr,true);
-		//$data=array('username'=>'prashant','table_no'=>'1');
+		//$data=array('username'=>'abc@gmail.com','table_no'=>'3');
 		
 		$user = $data['username'];
 		$table_no=$data['table_no'];
-		
 		$array=array();
 		
-		$query1="SELECT * FROM waiter WHERE table_no='$table_no'";
+		$query1="SELECT id FROM waiter WHERE table_no='$table_no'";
 		$result1=mysqli_query($conn,$query1);
 
 		if(mysqli_num_rows($result1)>0){		//waiter assigned hai pehle se
 			//echo "waiter";
-			$row=mysqli_fetch_assoc($result1);
-
-			$array['waiters_info']=array('id' => $row['id'],
-										 'name' => $row['name'],
-										 'contact_no' => $row['contact_no'],
-										 'table_no' => $table_no);
+			$array['status'] = 1;
+			$array['OTP'] = "";
 		}
 		else {
-			$query="SELECT * FROM waiter ORDER BY table_no limit 1";
+			$query="SELECT id FROM waiter ORDER BY table_no limit 1";
 			$result= mysqli_query($conn,$query);
-
-			if(mysqli_num_rows($result)>0){
+			$row=mysqli_fetch_assoc($result);
 			
-				$row=mysqli_fetch_assoc($result);
-
-				if($row['table_no']!="0")
-					$id='0';
-				else
-					$id=$row['id'];
-
-				$array['waiters_info']=array('id' => $id,
-										 'name' => $row['name'],
-										 'contact_no' => $row['contact_no'],
-										 'table_no' => $table_no);
-			}
-			if($id!='0'){
-				$id=$array['waiters_info']['id'];
-
-				$query="UPDATE waiter set table_no=$table_no where id=$id";
-				$result= mysqli_query($conn,$query);
-			}
-		}
-		
-		$table_no_int=(int)$table_no;
-		$query2 = "SELECT * FROM tables WHERE table_no = $table_no_int";
-		$result2 = mysqli_query($conn, $query2);
-		
-		if(mysqli_num_rows($result2) > 0) {
+			$id = $row['id'];
+			$query="UPDATE waiter set table_no=$table_no where id=$id";
+			$result= mysqli_query($conn,$query);
 			
-			$row = mysqli_fetch_assoc($result2);
-			$add_users = $row['users'] . "," . $user;
-			//echo $add_users;
-			
-			$query3 = "UPDATE tables SET users = '$add_users' WHERE table_no = $table_no_int";
-			$result3 = mysqli_query($conn, $query3);
-			
-			/*$arr = explode(",", $add_users);
-			
-			foreach($arr as $username) {
-				$array['users_info'] = array( "name" => $username );
-			}*/
-		}
-		else {
-			$id = $array['waiters_info']['id'];
-			$query4 = "INSERT INTO tables VALUES('$table_no_int','$user', '$id')";
+			$otp = mt_rand(100000,999999);
+			$table_no_int=(int)$table_no;
+			$query4 = "INSERT INTO tables VALUES($table_no_int, '$user', '$id', $otp,0)";
 			$result4 = mysqli_query($conn, $query4);
 			
-			//$array['users_info']  = array("name" => $user);
+			$array['status']= -1;
+			$array['OTP'] = $otp;
 		}
+
+		// Assigning OTP for new users & returning NULL for existing user
+		
+		$json = json_encode($array);
+		echo $json;
 	}
 
 	/* details of the food_items assigned to a waiter */
@@ -600,7 +565,76 @@
 		$arr = json_encode($array);
 		echo $arr;
 	}
-
+	
+	else if(isset($_POST['prev_total'])) {
+		$table_no = $_POST['prev_total'];
+		//$table_no = 1;
+		$query = "SELECT food_name FROM store_order WHERE table_no = $table_no";
+		$result = mysqli_query($conn, $query);
+		$total_price=0;
+		while($row = mysqli_fetch_assoc($result)) {
+			$food = $row['food_name'];
+			$arr = explode("->",$food);
+			$name = $arr[0];
+			$qty = intval($arr[1]);
+			$query1 = "SELECT price FROM food_items WHERE name = '$name'";
+			$result1 = mysqli_query($conn, $query1);
+			$row1 = mysqli_fetch_assoc($result1);
+			$price = $row1['price'];
+			$total_price = $total_price + ($qty*$price);
+		}
+		echo $total_price;
+	}
+	
+	else if(isset($_POST['get_bill'])) {
+		$table_no = $_POST['get_bill'];
+		//$table_no = 1;
+		$query = "SELECT food_name FROM store_order WHERE table_no = $table_no";
+		$result = mysqli_query($conn, $query);
+		$data=array();
+		$i=0;
+		while($row = mysqli_fetch_assoc($result)) {
+			$food = $row['food_name'];
+			$arr = explode("->",$food);
+			$name = $arr[0];
+			$qty = (int)$arr[1];
+			$query1 = "SELECT price FROM food_items WHERE name = '$name'";
+			$result1 = mysqli_query($conn, $query1);
+			$row1 = mysqli_fetch_assoc($result1);
+			$price = $row1['price'];
+			$data['bill'][$i]['food_name'] = $name;
+			$data['bill'][$i]['qty'] = $qty;
+			$data['bill'][$i]['price'] = $price;
+			$i++;
+		}
+		$json = json_encode($data);
+		echo $json;
+	}
+	
+	else if(isset($_POST['verify_otp'])) {
+		$arr = json_decode($_POST['verify_otp'], true);
+		$otp = $arr['otp'];
+		$user = $arr['email'];
+		$query = "SELECT OTP FROM tables WHERE OTP=$otp";
+		$result = mysqli_query($conn, $query);
+		
+		if(mysqli_num_rows($result) > 0) {
+			$query = "SELECT users,table_no FROM tables WHERE OTP=$otp";
+			$result = mysqli_query($conn, $query);
+			
+			$row = mysqli_fetch_assoc($result);
+			$add_users = $row['users'] . "," . $user;
+			//echo $add_users;
+			
+			$query3 = "UPDATE tables SET users = '$add_users' WHERE OTP = $otp";
+			$result3 = mysqli_query($conn, $query3);
+			
+			echo $row['table_no'];
+		}
+		else {
+			echo 0;
+		}
+	}
 	mysqli_close($conn);
 
 ?>
