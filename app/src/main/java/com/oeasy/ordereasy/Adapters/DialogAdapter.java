@@ -29,8 +29,8 @@ public class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.DialogHold
     public void onBindViewHolder(DialogHolder holder, int position) {
         FoodItem item=mList.get(position);
         holder.mName.setText(item.getName());
-        holder.mQty.setText("Qty-"+item.getQty());
-        item.setCost(String.valueOf((item.getPrice())*Float.parseFloat(item.getQty())));
+        holder.mQty.setText(item.getQty());
+        item.setCost(String.valueOf((item.getPrice())*Float.parseFloat(item.getQty().replace("Qty ",""))));
         holder.mPrice.setText(item.getCost());
     }
 

@@ -75,7 +75,6 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
                     @Override
                     public void onClick(View v) {
                         String spItem= (String) sp.getSelectedItem();
-                        spItem=spItem.replace("Qty ","");
                         if(alreadyPresent==0){
                         current.setQty(spItem);
                         db.createFoodItems(current);

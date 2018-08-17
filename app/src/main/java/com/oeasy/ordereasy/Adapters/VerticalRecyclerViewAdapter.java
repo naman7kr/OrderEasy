@@ -1,16 +1,25 @@
 package com.oeasy.ordereasy.Adapters;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
+
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.oeasy.ordereasy.Interfaces.ItemTouchHelperAdapter;
@@ -21,13 +30,14 @@ import com.oeasy.ordereasy.Others.Utilities;
 import com.oeasy.ordereasy.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 /**
  * Created by utkarshh12 on 4/11/2018.
  */
 
-public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRecyclerViewAdapter.MessageViewHolder> implements ItemTouchHelperAdapter{
+public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRecyclerViewAdapter.MessageViewHolder> implements ItemTouchHelperAdapter {
 
     private ArrayList<FoodItem> foodItemArrayList;
     private Context context;
@@ -57,18 +67,123 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
         final VerticalRecyclerViewAdapter.MessageViewHolder messageViewHolder =holder;
         messageViewHolder.fName.setText(fdItem.getName());
         messageViewHolder.fDescription.setText(fdItem.getDesc());
-        setSpinner(holder.fSpinner,fdItem);
-        if(foodItemArrayList.get(position).getTag()==0){
-            messageViewHolder.fTag.setVisibility(View.VISIBLE);
-            messageViewHolder.remBtn.setVisibility(View.VISIBLE);
-            messageViewHolder.fSpinner.setVisibility(View.VISIBLE);
-            messageViewHolder.fAlreadyPlaced.setVisibility(View.GONE);
-        }else{
-            messageViewHolder.fTag.setVisibility(View.GONE);
-            messageViewHolder.remBtn.setVisibility(View.GONE);
-            messageViewHolder.fSpinner.setVisibility(View.GONE);
-            messageViewHolder.fAlreadyPlaced.setVisibility(View.VISIBLE);
-        }
+        messageViewHolder.qty.setText(fdItem.getQty());
+        final String[] ar_dess_drinks=context.getResources().getStringArray( R.array.Qty_for_desserts_and_drinks);
+        final String[] ar_main_start=context.getResources().getStringArray(R.array.Qty_for_maincourse_and_starters);
+        final String[] ar_bread=context.getResources().getStringArray(R.array.Qty_for_bread);
+        messageViewHolder.minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int index;
+                if(fdItem.getQtyType()==0){
+
+                    index=Arrays.asList(ar_dess_drinks).indexOf(holder.qty.getText().toString());
+                            if(index!=0){
+                                holder.qty.setText(ar_dess_drinks[index-1]);
+                            }
+                        }else if(fdItem.getQtyType()==1){
+                            index=Arrays.asList(ar_main_start).indexOf(holder.qty.getText().toString());
+                    Log.e("in", String.valueOf(holder.qty.getText().toString()));
+                            if(index!=0){
+                                holder.qty.setText(ar_main_start[index-1]);
+                            }
+                        }else{
+                            index=Arrays.asList(ar_bread).indexOf(holder.qty.getText().toString());
+                            if(index!=0){
+                                holder.qty.setText(ar_bread[index-1]);
+                    }
+                }
+                fdItem.setQty(holder.qty.getText().toString());
+                db.updateFoodQty(fdItem.getFid(),fdItem.getQty());
+            }
+        });
+        messageViewHolder.plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int index;
+                if(fdItem.getQtyType()==0){
+                    index=Arrays.asList(ar_dess_drinks).indexOf(holder.qty.getText().toString());
+                    if(index!=ar_dess_drinks.length-1){
+                        holder.qty.setText(ar_dess_drinks[index+1]);
+                    }
+                }else if(fdItem.getQtyType()==1){
+                    index=Arrays.asList(ar_main_start).indexOf(holder.qty.getText().toString());
+                    if(index!=ar_main_start.length-1){
+                        holder.qty.setText(ar_main_start[index+1]);
+                    }
+                }else{
+                    index=Arrays.asList(ar_bread).indexOf(holder.qty.getText().toString());
+                    if(index!=ar_bread.length-1){
+                        holder.qty.setText(ar_bread[index+1]);
+                    }
+                }
+                fdItem.setQty(holder.qty.getText().toString());
+                db.updateFoodQty(fdItem.getFid(),fdItem.getQty());
+            }
+        });
+        messageViewHolder.qty.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onClick(View view) {
+                final AlertDialog mDialog = new AlertDialog.Builder(context)
+                        .setTitle("Set Quantity")
+                        .setView(R.layout.dialog_set_qty)
+                        .create();
+                mDialog.show();
+                int width = (int)(context.getResources().getDisplayMetrics().widthPixels*0.80);
+                int height = (int)(context.getResources().getDisplayMetrics().heightPixels*0.60);
+                mDialog.getWindow().setLayout(width,height);
+
+
+                final NumberPicker picker=mDialog.findViewById(R.id.qty_picker);
+                Button set=mDialog.findViewById(R.id.dialog_setqty_set);
+                Button cancel=mDialog.findViewById(R.id.dialog_setqty_cancel);
+
+                set.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(fdItem.getQtyType()==0){
+                            messageViewHolder.qty.setText(ar_dess_drinks[picker.getValue()]);
+                        }else if(fdItem.getQtyType()==1){
+                            messageViewHolder.qty.setText(ar_main_start[picker.getValue()]);
+                        }else{
+                            messageViewHolder.qty.setText(ar_bread[picker.getValue()]);
+                        }
+                        fdItem.setQty(messageViewHolder.qty.getText().toString());
+                        db.updateFoodQty(fdItem.getFid(),fdItem.getQty());
+                        mDialog.dismiss();
+                    }
+                });
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mDialog.dismiss();
+                    }
+                });
+
+                if(fdItem.getQtyType()==0){
+                    picker.setMaxValue(ar_dess_drinks.length-1);
+                    picker.setMinValue(0);
+                    picker.setWrapSelectorWheel(false);
+                    picker.setDisplayedValues(ar_dess_drinks);
+                    picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+                }else if(fdItem.getQtyType()==1){
+                    picker.setMaxValue(ar_main_start.length-1);
+                    picker.setMinValue(0);
+                    picker.setWrapSelectorWheel(false);
+                    picker.setDisplayedValues(ar_main_start);
+                    picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+                }else{
+                    picker.setMaxValue(ar_bread.length-1);
+                    picker.setMinValue(0);
+                    picker.setWrapSelectorWheel(false);
+                    picker.setDisplayedValues(ar_bread);
+                    picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+                }
+
+            }
+        });
+
         messageViewHolder.remBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,51 +199,6 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
 
     }
 
-    private void setSpinner(final Spinner sp, final FoodItem item) {
-
-        ArrayAdapter<CharSequence> adapter=null;
-        int arrayId;
-        if(item.getQtyType()==0) {
-            adapter = ArrayAdapter.createFromResource(context, R.array.Qty_for_desserts_and_drinks, android.R.layout.simple_spinner_item);
-            arrayId=R.array.Qty_for_desserts_and_drinks;
-        }
-        else if(item.getQtyType()==1)
-        {
-            adapter=ArrayAdapter.createFromResource(context,R.array.Qty_for_maincourse_and_starters,android.R.layout.simple_spinner_item);
-            arrayId=R.array.Qty_for_maincourse_and_starters;
-        }
-        else
-        {
-            adapter=ArrayAdapter.createFromResource(context,R.array.Qty_for_bread,android.R.layout.simple_spinner_item);
-            arrayId=R.array.Qty_for_bread;
-        }
-        String [] quantity=context.getResources().getStringArray(arrayId);
-
-        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        sp.setAdapter(adapter);
-        for(int i=0;i<quantity.length;i++){
-            String qty=quantity[i].replace("Qty ","");
-            if(item.getQty().compareTo(qty)==0){
-                sp.setSelection(i);
-                break;
-            }else{
-                sp.setSelection(0);
-            }
-        }
-        sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String sQty= (String) sp.getSelectedItem();
-                sQty=sQty.replace("Qty ","");
-                db.updateFoodQty(item.getFid(),sQty);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
 
     @Override
     public int getItemCount() {
@@ -162,11 +232,8 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
         TextView fDescription;
         ImageView fImage;
         TextView fPrice;
-        Spinner qtySp;
-        TextView remBtn;
-        ImageView fTag;
-        Spinner fSpinner;
-        TextView fAlreadyPlaced;
+        Button remBtn;
+        Button plus,minus,qty;
         public LinearLayout cLayout;
         public MessageViewHolder(View itemView) {
             super(itemView);
@@ -177,12 +244,11 @@ public class VerticalRecyclerViewAdapter extends RecyclerView.Adapter<VerticalRe
             fDescription=itemView.findViewById(R.id.cart_item_description);
             fImage=itemView.findViewById(R.id.cart_item_img);
             fPrice=itemView.findViewById(R.id.cart_item_price);
-            qtySp=itemView.findViewById(R.id.cart_item_qty_spinner);
             remBtn=itemView.findViewById(R.id.cart_item_remove_btn);
-            remBtn.setTextColor(Color.RED);
-            fTag=itemView.findViewById(R.id.cart_item_tag);
-            fSpinner=itemView.findViewById(R.id.cart_item_qty_spinner);
-            fAlreadyPlaced=itemView.findViewById(R.id.cart_item_orderpresent);
+            plus=itemView.findViewById(R.id.cart_qty_plus);
+            minus=itemView.findViewById(R.id.cart_qty_minus);
+            qty=itemView.findViewById(R.id.cart_qty);
+
             cLayout=itemView.findViewById(R.id.cart_item_layout);
         }
     }

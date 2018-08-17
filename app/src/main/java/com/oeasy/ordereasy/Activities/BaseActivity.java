@@ -43,7 +43,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     protected FloatingActionButton fab;
     private int check=-1;
     private final int SHOW_RATING=1;
-    Dialog mDialog;
+    private Dialog mDialog;
     DatabaseHelper db;
     public String res="";
 
@@ -79,6 +79,8 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                     SharedPreferences sp=getSharedPreferences("table",MODE_PRIVATE);
                     SharedPreferences.Editor ed= sp.edit();
                     ed.remove("table_no");
+                    ed.remove("status");
+                    ed.remove("otp");
                     ed.commit();
                     res=response;
                     showRating();

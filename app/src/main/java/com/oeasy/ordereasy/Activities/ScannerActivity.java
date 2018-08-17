@@ -128,7 +128,9 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
             SharedPreferences.Editor ed= sp.edit();
             ed.putString("table_no",table_no);
             ed.commit();
-            startActivity(new Intent(this,CartActivity.class));
+            Intent intent=new Intent(this,CartActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
             finish();
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
@@ -144,6 +146,20 @@ public class ScannerActivity extends BaseActivity implements ZXingScannerView.Re
         StringRequest request=new StringRequest(Request.Method.POST, Constants.URL_PROCESS_REQUEST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                try {
+                    JSONObject jobj =new JSONObject(response);
+                    String status= String.valueOf(jobj.get("status"));
+                    String otp=  String.valueOf(jobj.get("OTP"));
+                    SharedPreferences sp= getSharedPreferences("table",MODE_PRIVATE);
+                    SharedPreferences.Editor ed=sp.edit();
+                    ed.putString("status",status);
+                    ed.putString("otp",otp);
+                    ed.commit();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
             }
         }, new Response.ErrorListener() {
             @Override

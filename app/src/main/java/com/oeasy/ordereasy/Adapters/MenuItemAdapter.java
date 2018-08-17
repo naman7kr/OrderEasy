@@ -71,8 +71,6 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MyView
                     @Override
                     public void onClick(View v) {
                         String spItem= (String) sp.getSelectedItem();
-
-                        spItem=spItem.replace("Qty ","");
                         Log.e("item",spItem);
                         if(alreadyPresent==0){
                             item.setQty(spItem);

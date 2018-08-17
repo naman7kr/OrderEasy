@@ -1,5 +1,7 @@
 package com.oeasy.ordereasy.Fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -58,9 +60,27 @@ public class BillFragment extends Fragment {
     }
 
     private void getData() {
+        SharedPreferences sp=getContext().getSharedPreferences("table", Context.MODE_PRIVATE);
+        final String tn=sp.getString("table_no","");
         StringRequest request=new StringRequest(Request.Method.POST, Constants.URL_PROCESS_REQUEST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.e("res",response);
+                try {
+                    JSONObject job1=new JSONObject(response);
+                    JSONArray jA=job1.getJSONArray("bill");
+                    for(int i=0;i<jA.length();i++){
+                        JSONObject job2=jA.getJSONObject(i);
+                        FoodItem item=new FoodItem();
+                        item.setName(job2.getString("food_name"));
+                        item.setQty(job2.getString("qty"));
+                        item.setPrice(Float.parseFloat(job2.getString("price")));
+                        list.add(item);
+                        adapter.notifyDataSetChanged();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
             }, new Response.ErrorListener() {
             @Override
@@ -71,7 +91,7 @@ public class BillFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params= new HashMap<>();
-                params.put("get_bill","");
+                params.put("get_bill",tn);
                 return params;
             }
         };

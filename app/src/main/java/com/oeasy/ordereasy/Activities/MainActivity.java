@@ -28,9 +28,6 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        DatabaseHelper db=new DatabaseHelper(this);
-//        db.onUpgrade(db.getWritableDatabase(),1,1);
-
         initialize();
 
         setToolbar();

@@ -46,7 +46,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class PlaceOrderDialogFragment extends DialogFragment implements View.OnClickListener {
     private DialogAdapter dadapter;
     private ArrayList<FoodItem> mList;
-    private TextView grand_total;
+    private TextView grand_total,prev_total;
     private Button confirm,cancel;
     RecyclerView rView;
     DatabaseHelper db;
@@ -81,6 +81,7 @@ public class PlaceOrderDialogFragment extends DialogFragment implements View.OnC
             rView.setLayoutManager(new LinearLayoutManager(getContext()));
         }
         rView.setAdapter(dadapter);
+        getPrevTotal();
         setTotal();
         setCancelable(false);
         return mDialog;
@@ -90,6 +91,7 @@ public class PlaceOrderDialogFragment extends DialogFragment implements View.OnC
         rView=mDialog.findViewById(R.id.dialog_rview);
         dadapter=new DialogAdapter(getContext(),mList);
         grand_total=mDialog.findViewById(R.id.dialog_grand_total);
+        prev_total=mDialog.findViewById(R.id.dialog_prev_total);
         confirm=mDialog.findViewById(R.id.dialog_place_order_confirm_btn);
         cancel=mDialog.findViewById(R.id.dialog_place_order_cancel_btn);
         confirm.setOnClickListener(this);
@@ -114,6 +116,7 @@ public class PlaceOrderDialogFragment extends DialogFragment implements View.OnC
         float cost=0;
         for(int i=0;i<mList.size();i++){
             String pQty=mList.get(i).getQty();
+            pQty=pQty.replace("Qty ","");
             float price=mList.get(i).getPrice();
             cost+=price*(Float.parseFloat(pQty));
         }
@@ -129,14 +132,13 @@ public class PlaceOrderDialogFragment extends DialogFragment implements View.OnC
             for(int i=0;i<fList.size();i++){
                 JSONObject jObject=fList.get(i).getJSONObject();
                 try {
-                    jObject.put("qty",fList.get(i).getQty());
+                    jObject.put("qty",fList.get(i).getQty().replace("Qty ",""));
                     jObject.put("table_no",tableNo);
                     jsonArray.put(jObject);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-            Log.e("JSON",jsonArray.toString());
             Toast.makeText(getContext(),"Your Order has been placed",Toast.LENGTH_LONG).show();
             StringRequest request=new StringRequest(Request.Method.POST, Constants.URL_PROCESS_REQUEST, new Response.Listener<String>() {
                 @Override
@@ -162,6 +164,32 @@ public class PlaceOrderDialogFragment extends DialogFragment implements View.OnC
             Toast.makeText(getContext(),"No waiter added First scan QR",Toast.LENGTH_SHORT).show();
         }
     }
+
+    public void getPrevTotal() {
+        SharedPreferences sp=context.getSharedPreferences("table", MODE_PRIVATE);
+        final String tn=sp.getString("table_no","");
+        StringRequest request=new StringRequest(Request.Method.POST, Constants.URL_PROCESS_REQUEST, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                prev_total.setText(response);
+                grand_total.setText(String.valueOf(Float.parseFloat(grand_total.getText().toString())+Float.parseFloat(response)));
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params= new HashMap<>();
+                params.put("prev_total",tn);
+                return params;
+            }
+        };
+        RequestHandler.getInstance(context).addToRequestQueue(request);
+    }
+
     public interface  Communicator{
         void communicatorMessage(String message);
     }
