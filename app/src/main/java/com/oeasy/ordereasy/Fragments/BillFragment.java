@@ -66,6 +66,7 @@ public class BillFragment extends Fragment {
             @Override
             public void onResponse(String response) {
                 Log.e("res",response);
+                list.clear();
                 try {
                     JSONObject job1=new JSONObject(response);
                     JSONArray jA=job1.getJSONArray("bill");
@@ -113,16 +114,6 @@ public class BillFragment extends Fragment {
         rView.setAdapter(adapter);
     }
     private ArrayList<FoodItem> setData() {
-        ArrayList<FoodItem> bList=db.getBillItems();
-        for(int i=0;i<bList.size();i++){
-            bList.get(i).setTag(1);
-            list.add(bList.get(i));
-        }
-        ArrayList<FoodItem> cList=db.getAllFoodItems();
-        for(int i=0;i<cList.size();i++){
-            cList.get(i).setTag(0);
-            list.add(cList.get(i));
-        }
         return list;
     }
 }
